@@ -1,7 +1,25 @@
 @import "tailwindcss";
 
+
+
+
+/* 
+    :root {
+    --indigo: #1c2b4a;
+    --indigo-deep: #12203a;
+    --gold: #c79a3e;
+    --cream: #f7f2e7;
+    --clay: #a0472e;
+    --ink: #241f18;
+    --line: #e4dbc7;
+    --card: #ffffff;
+  }
+*/
+
 @theme{
   --color-deep-indigo: #12203a;
+  --color-custom-cream: #f7f2e7;
+  --color-custom-gold: #c79a3e;
 }
 
 
