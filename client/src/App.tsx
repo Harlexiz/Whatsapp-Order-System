@@ -5,6 +5,7 @@ import heroImg from './assets/hero.png'
 
 import Header from './components/header/Header'
 import Hero from './components/hero/Hero'
+import Footer from './components/footer/Footer'
 
 
 function App() {
@@ -14,6 +15,14 @@ function App() {
     <>
     <Header />
     <Hero />
+    <div className='h-1000 bg-slate-700'>
+
+    </div>
+
+    <div id='catalog'>
+      Catalg
+    </div>
+    <Footer />
     </>
   )
 }
