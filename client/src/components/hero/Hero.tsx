@@ -1,10 +1,6 @@
-
+import {handleClick} from '../../utils/scroll.ts'
 export default function Hero() {
-    const handleClick = (id: string): void => {
-        document.getElementById(id)?.scrollIntoView({
-            behavior: "smooth",
-        });
-    };
+   
     return (
         <div className="relative  bg-deep-indigo pt-16 pb-14 text-custom-cream after:content-[''] after:absolute
     after:inset-0 after:pointer-events-none  after:bg-[repeating-linear-gradient(115deg,rgba(199,154,62,0.08)_0_2px,transparent_2px_34px),repeating-linear-gradient(25deg,rgba(160,71,46,0.10)_0_2px,transparent_2px_40px)]">
