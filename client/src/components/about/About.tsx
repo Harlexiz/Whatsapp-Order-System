@@ -1,13 +1,14 @@
 import aboutImg from '../../images/ankara.jpg'
-import {handleClick} from '../../utils/scroll.ts'
+import { handleClick } from '../../utils/scroll.ts'
+import SlideIn from '../../utils/SlideIn.tsx'
 
 export default function About() {
     return (
-        <section className='py-10'>
+        <section className='py-10 overflow-x-hidden'>
             <div className="container">
                 <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
                     {/*Image */}
-                    <div className="order-1">
+                    <SlideIn direction='left' className='order-1'>
                         <div className="overflow-hidden rounded-2xl">
                             <img
                                 src={aboutImg}
@@ -15,10 +16,11 @@ export default function About() {
                                 className="h-72 w-full object-cover sm:h-96 lg:h-[450px]"
                             />
                         </div>
-                    </div>
+
+                    </SlideIn>
                     {/*Text */}
 
-                    <div className='order-2'>
+                    <SlideIn className='order-2' direction='right'>
                         <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-custom-gold">
                             About Us
                         </p>
@@ -55,17 +57,13 @@ export default function About() {
                             </div>
                         </div>
                         <button
-                            onClick={()=>handleClick('catalog')}
+                            onClick={() => handleClick('catalog')}
                             className="mt-8 cursor-pointer inline-flex items-center rounded-lg bg-custom-gold px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
                         >
                             Explore Our Products
                         </button>
 
-
-
-
-
-                    </div>
+                    </SlideIn>
 
 
                 </div>
