@@ -4,7 +4,7 @@ import SlideIn from '../../utils/SlideIn.tsx'
 
 export default function About() {
     return (
-        <section className='py-10 overflow-x-hidden'>
+        <section className='py-10 mt-20 overflow-x-hidden '>
             <div className="container">
                 <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
                     {/*Image */}
@@ -13,7 +13,7 @@ export default function About() {
                             <img
                                 src={aboutImg}
                                 alt="Our products"
-                                className="h-72 w-full object-cover sm:h-96 lg:h-[450px]"
+                                className="h-90 w-full object-cover sm:h-120 lg:h-112.5"
                             />
                         </div>
 
