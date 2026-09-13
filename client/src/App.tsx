@@ -2,15 +2,24 @@ import { useState, useRef, lazy, Suspense } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from './assets/vite.svg'
 // import heroImg from './assets/hero.png'
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
+import {ToastContainer} from 'react-toastify'
 import Header from './components/header/Header'
 import Hero from './components/hero/Hero'
 import Footer from './components/footer/Footer'
 import { useInView } from 'react-intersection-observer'
 import About from './components/about/About'
 import HowItWorks from './components/how/How'
+import Test from './components/Test';
 // const About = lazy(() => import('./components/about/About').then(module => { console.log("About Compoinent Loaded"); return module }))
 
+
+
+
+
+
+const queryClient = new QueryClient();
 
 function App() {
   const catalogRef = useRef(null);
@@ -23,18 +32,25 @@ function App() {
 
   return (
     <>
-      <Header />
-      <Hero />
-     
-      
-      <About />
-      <HowItWorks />
-      
+      <QueryClientProvider client={queryClient}>
+        <ToastContainer  theme='light'  autoClose={500}/>
+        <ReactQueryDevtools  initialIsOpen={false}  />
+       
+        <Header />
+        <Hero />
 
-      <div id='catalog'>
-        Catalg
-      </div>
-      <Footer />
+
+        <About />
+        <HowItWorks />
+        <Test />
+
+        <div id='catalog'>
+          Catalg
+        </div>
+        <Footer />
+
+      </QueryClientProvider>
+
     </>
   )
 }

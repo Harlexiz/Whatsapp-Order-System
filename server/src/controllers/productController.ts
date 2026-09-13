@@ -1,4 +1,5 @@
-import type {Request, Response} from 'express'
+import type { Request, Response } from 'express'
+import { products } from '../product.Data.js'
 
 
 interface HttpParams {
@@ -6,11 +7,15 @@ interface HttpParams {
     res: Response
 }
 
-export async function fetchAllProducts({req, res}: HttpParams) {
-    res.status(200).json({
-        message: "Yes it worked",
-        data: {
-            products: ["Product 1", "Product 2", "Product 3"]
-        }
-    })
+export async function fetchAllProducts({ req, res }: HttpParams) {
+    setTimeout(() => {
+        res.status(200).json({
+            message: "Yes it worked",
+            data: {
+                products
+            }
+        })
+
+    }, 5000)
+
 }

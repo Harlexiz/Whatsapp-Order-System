@@ -18,7 +18,6 @@ export default function HowCard(props:Props) {
     return (
         <div
            ref={ref}
-            key={props.key}
             className={`relative rounded-2xl  p-6 transition duration-1000 ease-in-out opacity-0 scale-0 ${inView ? 'opacity-100 scale-100':'opacity-0 scale-0'}`}
         >
             <div className={`size-16 md:size-20 mx-auto rounded-md flex items-center justify-center text-white`} style={{ backgroundColor: props.color }}>
