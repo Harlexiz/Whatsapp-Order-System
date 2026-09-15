@@ -5,7 +5,7 @@ interface CartItem {
     unitPrice: number,
     description: string,
     category: string,
-    quantity: number,
+    purchaseQty: number,
     isAvailable: boolean,
     image?: string,
     // reviewNeeded?: boolean
@@ -21,7 +21,7 @@ export const products: CartItem[] = [
     unitPrice: 29.99,
     description: "2.4GHz silent optical mouse with adjustable DPI and contoured grip.",
     category: "Electronics",
-    quantity: 45,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/mouse.jpg"
   },
@@ -31,7 +31,7 @@ export const products: CartItem[] = [
     unitPrice: 79.50,
     description: "RGB backlit mechanical keyboard with tactile blue switches.",
     category: "Electronics",
-    quantity: 0,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/keyboard.jpg"
   },
@@ -41,7 +41,7 @@ export const products: CartItem[] = [
     unitPrice: 18.00,
     description: "Double-wall vacuum insulated 1-liter bottle keeps drinks cold for 24 hours.",
     category: "Home & Kitchen",
-    quantity: 120,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/water-bottle.jpg"
   },
@@ -51,7 +51,7 @@ export const products: CartItem[] = [
     unitPrice: 149.99,
     description: "Over-ear Bluetooth headphones with active noise cancellation and 30-hour battery life.",
     category: "Audio",
-    quantity: 15,
+    purchaseQty: 1,
     isAvailable: true
   },
   {
@@ -60,7 +60,7 @@ export const products: CartItem[] = [
     unitPrice: 12.50,
     description: "100% organic breathable cotton plain crewneck t-shirt.",
     category: "Apparel",
-    quantity: 200,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/tshirt.jpg"
   },
@@ -70,7 +70,7 @@ export const products: CartItem[] = [
     unitPrice: 34.99,
     description: "7-in-1 aluminum adapter with HDMI, SD card reader, and 3 USB 3.0 ports.",
     category: "Electronics",
-    quantity: 0,
+    purchaseQty: 1,
     isAvailable: true
   },
   {
@@ -79,7 +79,7 @@ export const products: CartItem[] = [
     unitPrice: 24.95,
     description: "10-inch aluminum frying pan with durable non-stick granite coating.",
     category: "Home & Kitchen",
-    quantity: 38,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/frying-pan.jpg"
   },
@@ -89,7 +89,7 @@ export const products: CartItem[] = [
     unitPrice: 22.00,
     description: "Dimmable LED desk lamp with 5 color modes and built-in USB charging port.",
     category: "Office",
-    quantity: 60,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/desk-lamp.jpg"
   },
@@ -99,7 +99,7 @@ export const products: CartItem[] = [
     unitPrice: 189.10,
     description: "High-back mesh chair with lumbar support and 3D adjustable armrests.",
     category: "Office",
-    quantity: 8,
+    purchaseQty: 1,
     isAvailable: true
   },
   {
@@ -108,7 +108,7 @@ export const products: CartItem[] = [
     unitPrice: 42.00,
     description: "High-capacity fast-charging power bank with dual USB outputs.",
     category: "Electronics",
-    quantity: 0,
+    purchaseQty: 1,
     isAvailable: true,
     image: "https://example.com/images/powerbank.jpg"
   }

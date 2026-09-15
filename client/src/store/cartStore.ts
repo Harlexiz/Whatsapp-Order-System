@@ -11,7 +11,7 @@ export interface CartItem {
     unitPrice: number,
     description: string,
     category: string,
-    quantity: number,
+    purchaseQty: number,
     isAvailable: boolean,
     image?: string,
     // reviewNeeded?: boolean
@@ -24,7 +24,8 @@ interface CartState {
     removeFromCart: (productID: string) => void,
     clearCart: () => void,
     getCartValue: () => number,
-
+    increaseQty: (productID: string) => void,
+    decreaseQty: (productID: string) => void
     // getCartLength: () => void,
 
 }
@@ -101,11 +102,47 @@ export const useCartStore = create<CartState>()(
             getCartValue: () => {
                 const total = get().products.reduce(
                     (acc, eachProduct) =>
-                        eachProduct.isAvailable ? acc + eachProduct.unitPrice : acc,
+                        eachProduct.isAvailable ? acc + (eachProduct.unitPrice * eachProduct.purchaseQty) : acc,
                     0
                 );
                 return Math.round(total * 100) / 100;
             },
+
+            // Increment Product Quantity in the cart
+            increaseQty: (productID) => {
+
+                set((state) => {
+                    //Gets products that have different ids. This filters out the id of the product we intend removing
+                    if (!productID) {
+                        console.warn('Invalid productID passed');
+                        return state
+                    }
+                    const products = state.products.map((item) => item._id === productID ? { ...item, purchaseQty: item.purchaseQty + 1 } : item)
+
+                    return {
+                        products
+                    }
+                })
+
+            },
+            decreaseQty: (productID) => {
+                set((state) => {
+                    //Gets products that have different ids. This filters out the id of the product we intend removing
+                    if (!productID) {
+                        console.warn('Invalid productID passed');
+                        return state
+                    }
+                    const products = state.products.map((item) => item._id === productID ? 
+                    { ...item, purchaseQty: item.purchaseQty <= 1 ? 1 : item.purchaseQty - 1 }
+                    
+                    : item)
+
+                    return {
+                        products
+                    }
+                })
+
+            }
 
 
 

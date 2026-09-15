@@ -17,13 +17,7 @@ export default function Test() {
         }))
     ))
 
-    const cartValue = useMemo(() => {
-        const total = productList.reduce(
-            (acc, item) => (item.isAvailable ? acc + item.unitPrice : acc),
-            0
-        );
-        return Math.round(total * 100) / 100;
-    }, [productList]);
+
 
 
     //   const { productList, cartReconcilation } = useCartStore((
@@ -73,7 +67,7 @@ export default function Test() {
 
             <div className='border bg-violet-600 mt-4 min-h-50'>
                 <button className='p-4 bg-red-500 my-4' onClick={clearBtn}>Clear cart</button>
-                <button className='p-4 bg-red-500 m-4' onClick={() => console.log(productList)}>{cartValue}</button>
+              
 
 
 

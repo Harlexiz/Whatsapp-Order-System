@@ -8,9 +8,11 @@ interface CartListProps {
 }
 export default function CartList({ product }: CartListProps) {
 
-    const { removeBtn } = useCartStore(
+    const { removeBtn, increaseQty, decreaseQty } = useCartStore(
         useShallow((state) => ({
-            removeBtn: state.removeFromCart
+            removeBtn: state.removeFromCart,
+            increaseQty: state.increaseQty,
+            decreaseQty: state.decreaseQty
         }))
     )
 
@@ -46,19 +48,19 @@ export default function CartList({ product }: CartListProps) {
                 <div className="mt-3 flex items-center justify-between">
                     <div className="flex items-center border border-[#E4E0D8]">
                         <button
-                            onClick={() => console.log("Update me ")}
+                            onClick={() => decreaseQty(product._id)}
                             aria-label="Decrease quantity"
-                            className="flex h-8 w-8 items-center justify-center text-[#6B6558] transition-colors hover:bg-[#EFEBE3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F5B45]"
+                            className="cursor-pointer flex h-8 w-8 items-center justify-center text-[#6B6558] transition-colors hover:bg-[#EFEBE3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F5B45]"
                         >
                             <FaMinus className="h-3.5 w-3.5" />
                         </button>
                         <span className="w-8 text-center text-sm tabular-nums">
-                            1 {/* Item quantity*/}
+                          {product.purchaseQty}
                         </span>
                         <button
-                            onClick={() => console.log("Update")}
+                            onClick={() => increaseQty(product._id)}
                             aria-label="Increase quantity"
-                            className="flex h-8 w-8 items-center justify-center text-[#6B6558] transition-colors hover:bg-[#EFEBE3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F5B45]"
+                            className="cursor-pointer flex h-8 w-8 items-center justify-center text-[#6B6558] transition-colors hover:bg-[#EFEBE3] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F5B45]"
                         >
                             <FaPlus className="h-3.5 w-3.5" />
                         </button>
