@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express'
-import { products } from '../product.Data.js'
+import { products, type CartItem } from '../product.Data.js'
+import { verifyCartService } from '../services/productService.js'
 
 
 interface HttpParams {
@@ -7,7 +8,10 @@ interface HttpParams {
     res: Response
 }
 
-export async function fetchAllProducts({ req, res }: HttpParams) {
+
+
+//Fech All Products
+export async function fetchAllProducts(req: Request, res: Response) {
     setTimeout(() => {
         res.status(200).json({
             message: "Yes it worked",
@@ -17,5 +21,65 @@ export async function fetchAllProducts({ req, res }: HttpParams) {
         })
 
     }, 5000)
+
+}
+
+
+
+// Verify Cart
+
+interface VerificationResponse {
+    needsReview: boolean,
+    verifiedItems: CartItem[],
+    priceChanges: CartItem[],
+    nonExistentItems: number
+}
+
+export async function verifyCart(req: Request, res: Response) {
+    console.log("Verifying cart")
+
+    try {
+        const initial = Date.now()
+        // Get all the products tp be verified.
+        const { cartProducts } = req.body
+
+        if (!Array.isArray(cartProducts) || cartProducts.length === 0) {
+            return res.status(400).json({ message: 'Cart items are required' });
+        }
+
+
+        // // let result;
+
+        // const result = await verifyCartService(cartProducts);
+        // console.log("Result is ", result)
+        // // console.log("Final is", Date.now() - initial)
+
+
+        // res.status(200).json({ message: "Succesful", data: result })
+
+
+
+        const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+        await delay(2000);
+
+        const result = await verifyCartService(cartProducts);
+
+
+        return res.status(200).json({ message: "Succesful", data: result })
+
+
+
+
+        // //Check if cart is an array or cart is empty
+
+        //  if (!Array.isArray(products) || products.length === 0) {
+        //   return res.status(400).json({ message: 'Cart items are required' });
+        // }
+
+    } catch (error) {
+         console.log("Erro Joor")
+    }
+
 
 }

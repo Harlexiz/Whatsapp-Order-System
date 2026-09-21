@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import api from "../utils/api";
 import type { CartItem } from "../store/cartStore";
 
@@ -24,9 +24,50 @@ export const useFetchAllProducts = () => {
       return response.data  // Represents the whole backend reponse 
     },
     refetchOnWindowFocus: false,
-    staleTime: 0.5 * 60 * 1000,
-    refetchInterval: 0.5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
     refetchIntervalInBackground: false// ENsures no background refecth when component is not active
 
+  })
+}
+
+
+
+
+
+
+
+//Mutations
+
+
+//=>  Verify Cart
+
+interface VerificationData{
+    _id: string;
+    unitPrice: number;
+    purchaseQty: number;
+}
+
+
+
+interface ApiResponse<T> {
+  data: T
+}
+
+
+interface VerificationResponse{
+  needsReview: boolean,
+  verifiedItems: CartItem[],
+  priceChanges: CartItem[],
+  nonExistentItems: number
+}
+
+export const useVerifyCart = ()=>{
+  return useMutation({
+    mutationFn: async (cartProducts: VerificationData[])=>{
+      const response = await api.post<ApiResponse<VerificationResponse>>('/products/verify-cart', {cartProducts})
+      return response.data
+    }, 
+     
   })
 }

@@ -1,8 +1,12 @@
 import React, { useMemo } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { useCartStore } from '../../store/cartStore'
+import { useCartStore, type CartItem } from '../../store/cartStore'
 import { FaCartShopping } from 'react-icons/fa6'
 import CartList from './CartList'
+import { toast } from 'react-toastify'
+import { useVerifyCart } from '../../hooks/clientApi'
+import axios from 'axios'
+import Footer from '../footer/Footer'
 
 
 
@@ -11,38 +15,112 @@ import CartList from './CartList'
 export default function Cart() {
     console.log("Adding joor o")
 
-    const { productList, cartValue } = useCartStore((
+    const { productList, cartValue, priceChanged, itemsRemovedAfterVerification, updateChanges, changeCount } = useCartStore((
         useShallow((state) => ({
             productList: state.products,
-            cartValue: state.getCartValue
+            cartValue: state.getCartValue,
+            priceChanged: state.priceChanges,
+            itemsRemovedAfterVerification: state.ommittedItems,
+            updateChanges: state.acknowledgeChanges,
+            changeCount: state.priceChangeCount
+
         }))
     ))
-    // const cartValue = useMemo(() => {
-    //     const total = productList.reduce(
-    //         (acc, item) => (item.isAvailable ? acc + item.unitPrice : acc),
-    //         0
-    //     );
-    //     return Math.round(total * 100) / 100;
-    // }, [productList]);
+
+
+
+
+
+    //=> Verify Cart order in the backend
+
+    const { mutate, isPending, } = useVerifyCart()
+
+
+    const verifyCart = () => {
+        if (productList.length === 0) {
+            toast.error("Cart is empty")
+            return
+        }
+
+        // Get Verifying data
+        const productsToVerify = productList.map((item) => ({
+            _id: item._id,
+            unitPrice: item.unitPrice,
+            purchaseQty: item.purchaseQty
+        }))
+
+        mutate(productsToVerify, {
+            onSuccess: (data) => {
+                const { verifiedItems, priceChanges, nonExistentItems, needsReview } = data.data
+                useCartStore.setState({
+                    products: [...priceChanges, ...verifiedItems], // Reconcile cart
+                    ommittedItems: nonExistentItems,  //Set the number of items that has been ommitted when cart was verified
+                    priceChanges: priceChanges.length > 0,
+                    priceChangeCount: priceChanges.length // tracks the number of products that changed 
+                })
+                //if cart needs review, cross check orders and see what changed else submit my order on whatsapp
+                if(needsReview){
+                    toast.error("You np dey go anywhere")
+                    return
+                }
+
+                toast.success("Me i no need am o")
+            },
+            onError: (error) => {
+                // toast.error(error.response?.data.message)
+                if (axios.isAxiosError(error)) {
+                    toast.error(error.response?.data.message)
+                }
+            },
+            onSettled: () => {
+
+
+            }
+        })
+
+        console.log("Products to verify", productsToVerify)
+    }
+
+
+
+
+    
+
 
 
 
     return (
         <section className=" bg-[#f7f2e7] absolute right-0 top-full w-full h-screen py-20 overflow-y-auto">
-            <div className="container">
-                <div className="mx-auto max-w-2xl text-center">
+            <div className="container  mb-6">
+                <div className="mb-4">
                     <h2 className="text-2xl sm:text-3xl font-bold  tracking-wide text-gray-900 ">
-                        Cart
+                        Your Cart
                     </h2>
                     <p className="text-sm  leading-tight text-gray-600">
-                        Order in just a few simple steps
+                        Review your selected items
                     </p>
 
                 </div>
 
+                {/*Banner */}
+
+
+                {itemsRemovedAfterVerification > 0 &&
+                    <div className="bg-red-600 p-4 mt-4 text-center text-sm">
+                        ⚠️ {itemsRemovedAfterVerification} item(s) removed
+
+                    </div>
+                }
+
+
+
+
+
+                {/*Cart Lists */}
+
                 <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-12 md:items-start">
 
-                    <div className={`md:col-span-9  h-[400px] ${productList.length === 0 ? ' border pt-15 rounded-md' : ''}`}>
+                    <div className={`md:col-span-9 p-6  min-h-[400px]  border border-gray-300 rounded-lg ${productList.length === 0 ? ' border pt-15 rounded-md' : ''}`}>
                         {productList.length === 0 ?
                             (
                                 <div className=" flex items-center justify-center flex-col ">
@@ -65,20 +143,39 @@ export default function Cart() {
                                 </ul>
                             )
                         }
+
+                        {/*Keep Discard button */}
+                        {changeCount > 0 &&
+                            <div className='mt-6 flex gap-2 items-center justify-end '>
+                                
+                                <button className='p-3 cursor-pointer rounded-md border-gray-300 border text-sm' onClick={()=>updateChanges("discard")}>
+                                    Discard
+                                </button>
+
+                                <button onClick={() => updateChanges("keep")}
+                                    className='p-3 bg-custom-gold text-white text-sm rounded-md cursor-pointer' >
+                                    Keep Changes
+                                </button>
+
+
+                            </div>}
                     </div>
 
 
 
                     {/*checkout */}
-                    <div className="md:col-span-3  p-6 border rounded-md">
+                    <div className="md:col-span-3  p-6 border border-gray-300 rounded-md">
                         <h2 className="text-xl mb-6 font-semibold">Order Summary</h2>
 
-                        <p className="mb-2 text-sm flex justify-between"><span className="font-semibold">Total Items</span>{productList.length}</p>
-                        <p className="mb-2 text-sm flex justify-between"><span className="font-semibold">Total Items</span> ₦{cartValue().toFixed(2)}</p>
+                        <div className='border-b pb-2 border-gray-300'>
+                            <p className="mb-2 text-sm flex justify-between text-gray-400">Total Items <span className='text-black font-semibold'>{productList.length}</span></p>
+                            <p className="mb-2 text-sm flex justify-between text-gray-400">Value <span className='text-black font-semibold'> ₦{cartValue().toFixed(2)}</span></p>
+                        </div>
 
 
-                        <button className="py-2 mt-4 bg-deep-indigo text-white rounded-md w-full cursor-pointer ">
-                            Send Order
+                        <button disabled={isPending}
+                            className={`px-2 py-2.5 mt-6 bg-custom-gold text-sm text-white rounded-full w-full ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={verifyCart}>
+                            {isPending ? 'Verifying Cart...' : 'Send Order'}
                         </button>
                         {/* 
                         
@@ -100,6 +197,10 @@ export default function Cart() {
                     </div>
 
                 </div>
+                
+                
+
+
             </div>
         </section>
     )

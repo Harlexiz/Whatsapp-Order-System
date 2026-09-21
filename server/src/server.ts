@@ -9,6 +9,8 @@ import { productRouter } from "./routes/productRoutes.js";
 const myApp = express()
 const PORT = process.env.PORT || 3000
 
+myApp.use(express.json())
+
 myApp.use(cors({
     origin: ['http://localhost:5173'],
     credentials: true
