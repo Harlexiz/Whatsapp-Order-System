@@ -65,7 +65,7 @@ export default function Test() {
             </div>
 
 
-            <div className='border bg-violet-600 mt-4 min-h-50'>
+            {/* <div className='border bg-violet-600 mt-4 min-h-50'>
                 <button className='p-4 bg-red-500 my-4' onClick={clearBtn}>Clear cart</button>
               
 
@@ -74,7 +74,7 @@ export default function Test() {
                 {productList?.map((item) => (
                     <p key={item._id}>{item.name}</p>
                 ))}
-            </div>
+            </div> */}
         </div>
     )
 }

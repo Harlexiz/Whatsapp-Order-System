@@ -12,6 +12,7 @@ import { useInView } from 'react-intersection-observer'
 import About from './components/about/About'
 import HowItWorks from './components/how/How'
 import Test from './components/Test';
+import Product from './components/catalog/Product';
 // const About = lazy(() => import('./components/about/About').then(module => { console.log("About Compoinent Loaded"); return module }))
 
 
@@ -42,10 +43,10 @@ function App() {
 
         <About />
         <HowItWorks />
-        <Test />
+        {/* <Test /> */}
 
-        <div id='catalog'>
-          Catalg
+        <div id='' className=''>
+          <Product />
         </div>
         <Footer />
 

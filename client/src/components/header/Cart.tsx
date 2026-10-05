@@ -10,6 +10,27 @@ import Footer from '../footer/Footer'
 
 
 
+const prepareProductsForVerification = (productList: CartItem[]) => {
+    return productList.map((item) => ({
+        _id: item._id,
+        unitPrice: item.unitPrice,
+        purchaseQty: item.purchaseQty
+    }))
+}
+
+const reconcileCart = (
+    verifiedItems: CartItem[],
+    priceChanges: CartItem[],
+    nonExistentItems: number
+) => {
+    useCartStore.setState({
+        products: [...priceChanges, ...verifiedItems],
+        ommittedItems: nonExistentItems,
+        priceChanges: priceChanges.length > 0,
+        priceChangeCount: priceChanges.length
+    })
+}
+
 
 
 export default function Cart() {
@@ -37,29 +58,24 @@ export default function Cart() {
 
 
     const verifyCart = () => {
+        //Check if cart is empty
         if (productList.length === 0) {
             toast.error("Cart is empty")
             return
         }
 
         // Get Verifying data
-        const productsToVerify = productList.map((item) => ({
-            _id: item._id,
-            unitPrice: item.unitPrice,
-            purchaseQty: item.purchaseQty
-        }))
+        
+        const productsToVerify = prepareProductsForVerification(productList)
 
         mutate(productsToVerify, {
             onSuccess: (data) => {
                 const { verifiedItems, priceChanges, nonExistentItems, needsReview } = data.data
-                useCartStore.setState({
-                    products: [...priceChanges, ...verifiedItems], // Reconcile cart
-                    ommittedItems: nonExistentItems,  //Set the number of items that has been ommitted when cart was verified
-                    priceChanges: priceChanges.length > 0,
-                    priceChangeCount: priceChanges.length // tracks the number of products that changed 
-                })
+               
+                reconcileCart(verifiedItems, priceChanges, nonExistentItems)
+
                 //if cart needs review, cross check orders and see what changed else submit my order on whatsapp
-                if(needsReview){
+                if (needsReview) {
                     toast.error("You np dey go anywhere")
                     return
                 }
@@ -84,7 +100,7 @@ export default function Cart() {
 
 
 
-    
+
 
 
 
@@ -147,8 +163,8 @@ export default function Cart() {
                         {/*Keep Discard button */}
                         {changeCount > 0 &&
                             <div className='mt-6 flex gap-2 items-center justify-end '>
-                                
-                                <button className='p-3 cursor-pointer rounded-md border-gray-300 border text-sm' onClick={()=>updateChanges("discard")}>
+
+                                <button className='p-3 cursor-pointer rounded-md border-gray-300 border text-sm' onClick={() => updateChanges("discard")}>
                                     Discard
                                 </button>
 
@@ -197,8 +213,8 @@ export default function Cart() {
                     </div>
 
                 </div>
-                
-                
+
+
 
 
             </div>

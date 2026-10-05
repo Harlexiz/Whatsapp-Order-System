@@ -24,6 +24,36 @@ export async function fetchAllProducts(req: Request, res: Response) {
 
 }
 
+//test Fetch all the products
+
+export async function fecthTestProducts(req: Request, res: Response) {
+    const { category } = req.query
+    console.log("Category recieved was ", category)
+
+    if (category === 'all') {
+        // const myProducts = products.filter((item)=> item.category === category)
+        return res.status(200).json({
+            message: "All Products fetch",
+            data: {
+                products
+            }
+        })
+    }
+
+    //Do this 
+    const myProducts = products.filter((item) => item.category === category)
+    setTimeout(() => {
+        return res.status(200).json({
+            message: "Caregrioty",
+            data: {
+                products: myProducts
+            }
+        })
+    }, 5000)
+
+
+}
+
 
 
 // Verify Cart
@@ -78,7 +108,7 @@ export async function verifyCart(req: Request, res: Response) {
         // }
 
     } catch (error) {
-         console.log("Erro Joor")
+        console.log("Erro Joor")
     }
 
 

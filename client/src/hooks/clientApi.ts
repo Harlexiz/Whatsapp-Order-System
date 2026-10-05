@@ -32,6 +32,20 @@ export const useFetchAllProducts = () => {
 }
 
 
+export const useTestFetchProducts = (category: string) => {
+  return useQuery<ApiResponse<Product>>({
+    queryKey: ['test-products', category],
+    queryFn: async () => {
+      const response = await api.get<ApiResponse<Product>>(`/products/my-products?category=${category}`)
+      return response.data  // Represents the whole backend reponse 
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+    refetchIntervalInBackground: false// ENsures no background refecth when component is not active
+  })
+}
+
 
 
 
@@ -42,10 +56,10 @@ export const useFetchAllProducts = () => {
 
 //=>  Verify Cart
 
-interface VerificationData{
-    _id: string;
-    unitPrice: number;
-    purchaseQty: number;
+interface VerificationData {
+  _id: string;
+  unitPrice: number;
+  purchaseQty: number;
 }
 
 
@@ -55,19 +69,19 @@ interface ApiResponse<T> {
 }
 
 
-interface VerificationResponse{
+interface VerificationResponse {
   needsReview: boolean,
   verifiedItems: CartItem[],
   priceChanges: CartItem[],
   nonExistentItems: number
 }
 
-export const useVerifyCart = ()=>{
+export const useVerifyCart = () => {
   return useMutation({
-    mutationFn: async (cartProducts: VerificationData[])=>{
-      const response = await api.post<ApiResponse<VerificationResponse>>('/products/verify-cart', {cartProducts})
+    mutationFn: async (cartProducts: VerificationData[]) => {
+      const response = await api.post<ApiResponse<VerificationResponse>>('/products/verify-cart', { cartProducts })
       return response.data
-    }, 
-     
+    },
+
   })
 }

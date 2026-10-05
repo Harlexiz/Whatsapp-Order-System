@@ -57,7 +57,7 @@ export default function HowItWorks() {
 
 
     return (
-        <section className='py-10 mt-20'>
+        <section className='py-10  mt-5'>
             <div className="container">
                 {/*Section Title */}
                 <div className="mx-auto max-w-2xl text-center">
