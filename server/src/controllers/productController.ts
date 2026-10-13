@@ -1,6 +1,8 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import { products, type CartItem } from '../product.Data.js'
-import { verifyCartService } from '../services/productService.js'
+import { verifyCartService, fetchProductService } from '../services/productService.js'
+import { productModel } from '../models/productModel.js'
+import { Document } from 'mongoose'
 
 
 interface HttpParams {
@@ -11,46 +13,27 @@ interface HttpParams {
 
 
 //Fech All Products
-export async function fetchAllProducts(req: Request, res: Response) {
-    setTimeout(() => {
-        res.status(200).json({
-            message: "Yes it worked",
-            data: {
-                products
-            }
-        })
+export async function fetchProducts(req: Request, res: Response, next: NextFunction) {
 
-    }, 5000)
+    const category = typeof req.query.category === "string" ? req.query.category : undefined
+    const pageNo = Number(req.query.pageNo)
+    console.log("The data type is ", typeof(req.query.pageNo))
 
-}
+    console.log("The no sent was ", req.query.pageNo)
+    console.log("Category before passing ", category)
 
-//test Fetch all the products
+    //Pass to service
+    const fetchedProducts =  await fetchProductService({ category, pageNo });
+     const {products, pagination} = fetchedProducts
+    //This is used to throw error
+    // if (!product) {
+    //     throw new AppError("Product not found", 404);
+    // }
 
-export async function fecthTestProducts(req: Request, res: Response) {
-    const { category } = req.query
-    console.log("Category recieved was ", category)
+    
 
-    if (category === 'all') {
-        // const myProducts = products.filter((item)=> item.category === category)
-        return res.status(200).json({
-            message: "All Products fetch",
-            data: {
-                products
-            }
-        })
-    }
-
-    //Do this 
-    const myProducts = products.filter((item) => item.category === category)
-    setTimeout(() => {
-        return res.status(200).json({
-            message: "Caregrioty",
-            data: {
-                products: myProducts
-            }
-        })
-    }, 5000)
-
+    return res.status(200).json({ length: products.length , data: { products, pagination } })
+    //No try cath block. Expresss 5 passes errors automatically to error handler
 
 }
 

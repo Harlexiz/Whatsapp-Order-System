@@ -31,7 +31,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     className="aspect-4/4 w-full overflow-hidden bg-neutral-100 cursor-zoom-in group"
                 >
                     <img
-                        src={myImg}
+                        src={product.imageUrl}
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
@@ -71,10 +71,10 @@ export default function ProductCard({ product }: ProductCardProps) {
                         X
                     </button>
                     <img
-                        src={myImg}
+                        src={product.imageUrl}
                         alt={product.name}
                         onClick={(e) => e.stopPropagation()}
-                        className="max-w-full max-h-full object-contain rounded-md"
+                        className="w-full h-[500px] object-cover rounded-md max-w-[600px]"
                     />
                 </div>
 

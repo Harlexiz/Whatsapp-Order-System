@@ -116,3 +116,165 @@ export const products: CartItem[] = [
     image: "https://example.com/images/powerbank.jpg"
   }
 ]
+
+
+
+
+interface Pro {
+  name: string,
+  unitPrice: number,
+  category: string,
+  isAvailable: boolean,
+  imageUrl: string
+}
+
+
+
+// seeders/productData.ts
+export const productData: Pro[] = [
+  // ---------------- Electronics ----------------
+  {
+    name: 'Wireless Bluetooth Earbuds',
+    unitPrice: 15000,
+    category: 'Electronics',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500',
+  },
+  {
+    name: 'Mechanical Gaming Keyboard',
+    unitPrice: 25000,
+    category: 'Electronics',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500',
+  },
+  {
+    name: 'Portable Power Bank 20000mAh',
+    unitPrice: 9500,
+    category: 'Electronics',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1609592806596-4d1b5e5e7d68?w=500',
+  },
+  {
+    name: 'Smart LED Desk Lamp',
+    unitPrice: 7500,
+    category: 'Electronics',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500',
+  },
+  {
+    name: 'Noise Cancelling Headphones',
+    unitPrice: 32000,
+    category: 'Electronics',
+    isAvailable: false,
+    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
+  },
+  {
+    name: 'USB-C Multiport Hub',
+    unitPrice: 11000,
+    category: 'Electronics',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1587301810017-aaf5a7f3f6c0?w=500',
+  },
+  {
+    name: 'Smartwatch Fitness Tracker',
+    unitPrice: 28000,
+    category: 'Electronics',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
+  },
+
+  // ---------------- Home ----------------
+  {
+    name: 'Stainless Steel Water Bottle',
+    unitPrice: 4500,
+    category: 'Home',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500',
+  },
+  {
+    name: 'Non-Stick Frying Pan Set',
+    unitPrice: 13500,
+    category: 'Home',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1584990347163-0680f7f4fd3d?w=500',
+  },
+  {
+    name: 'Scented Soy Candle Set',
+    unitPrice: 6000,
+    category: 'Home',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1602874801006-e26c4c5a0d5f?w=500',
+  },
+  {
+    name: 'Memory Foam Pillow',
+    unitPrice: 8500,
+    category: 'Home',
+    isAvailable: false,
+    imageUrl: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=500',
+  },
+  {
+    name: 'Ceramic Dinner Plate Set (6pc)',
+    unitPrice: 17000,
+    category: 'Home',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1605883705077-8d3d3cebe78c?w=500',
+  },
+  {
+    name: 'Cotton Throw Blanket',
+    unitPrice: 9000,
+    category: 'Home',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1600369671236-e74521d4b6ad?w=500',
+  },
+  {
+    name: 'Indoor Plant Pot Set',
+    unitPrice: 5500,
+    category: 'Home',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=500',
+  },
+
+  // ---------------- Sports ----------------
+  {
+    name: 'Yoga Mat (Non-Slip)',
+    unitPrice: 7000,
+    category: 'Sports',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500',
+  },
+  {
+    name: 'Adjustable Dumbbell Set',
+    unitPrice: 45000,
+    category: 'Sports',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=500',
+  },
+  {
+    name: 'Resistance Bands Set',
+    unitPrice: 5000,
+    category: 'Sports',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1598971639058-afd1a7a1b7e2?w=500',
+  },
+  {
+    name: 'Football (Size 5)',
+    unitPrice: 8500,
+    category: 'Sports',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1614632537423-1e6c2e7e0aab?w=500',
+  },
+  {
+    name: 'Running Shoes',
+    unitPrice: 22000,
+    category: 'Sports',
+    isAvailable: false,
+    imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+  },
+  {
+    name: 'Skipping Rope (Speed Cable)',
+    unitPrice: 3500,
+    category: 'Sports',
+    isAvailable: true,
+    imageUrl: 'https://images.unsplash.com/photo-1434596922112-19c563067271?w=500',
+  },
+];

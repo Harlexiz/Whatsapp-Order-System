@@ -25,7 +25,7 @@ export default function Hero() {
                         </button>
                     </div>
                 </div>
-                <div className="order-first   relative z-1  aspect-4/3 md:order-0 bg-[url('./images/ankara.jpg')] bg-center bg-cover  bg-no-repeat border rounded-[18px]"></div>
+                <div className="order-first   relative z-1  aspect-4/3 md:order-0 bg-[url('./images/ankara.jpg')] bg-center bg-cover  bg-no-repeat  rounded-[18px]"></div>
             </div>
         </div>
     )

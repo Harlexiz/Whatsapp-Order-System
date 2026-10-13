@@ -31,17 +31,27 @@ export const useFetchAllProducts = () => {
   })
 }
 
+interface Product {
+  products: CartItem[],
+  pagination: {
+    totalPages: number,
+    hasNextPage: boolean,
+    hasPrevPage: boolean
+  }
+}
 
-export const useTestFetchProducts = (category: string) => {
+export const useTestFetchProducts = (category: string | null, pageNo: number) => {
   return useQuery<ApiResponse<Product>>({
-    queryKey: ['test-products', category],
+    queryKey: ['test-products', category, pageNo],
     queryFn: async () => {
-      const response = await api.get<ApiResponse<Product>>(`/products/my-products?category=${category}`)
+      const response = await api.get<ApiResponse<Product>>(`/products/all-products`, {
+        params: { category, pageNo }
+      })
       return response.data  // Represents the whole backend reponse 
     },
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000,
-    refetchInterval: 5 * 60 * 1000,
+    staleTime: 0.5 * 60 * 1000,
+    refetchInterval: 0.5 * 60 * 1000,
     refetchIntervalInBackground: false// ENsures no background refecth when component is not active
   })
 }

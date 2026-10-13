@@ -6,16 +6,16 @@ interface Props {
     name: string,
     value: string,
     activeCategory: string,
-    setCategory: Dispatch<SetStateAction<string>>
+    onCategoryChange: (category: string) => void;
 }
 
 
-export default function ProductTab({ name, value, setCategory, activeCategory }: Props) {
+export default  React.memo(function ProductTab({ name, value, onCategoryChange, activeCategory }: Props) {
 
     // For Desktop 
     return (
         <div>
-            <button onClick={() => setCategory(value)}
+            <button onClick={() => onCategoryChange(value)}
                 className={`relative shrink-0 whitespace-nowrap text-sm px-4 py-2   transition-colors duration-400 border cursor-pointer rounded-full hover:bg-custom-gold  hover:text-white hover:border-custom-gold
                 
                     ${activeCategory ===  value ?  
@@ -25,4 +25,4 @@ export default function ProductTab({ name, value, setCategory, activeCategory }:
                 `}>{name}</button>
         </div>
     )
-}
+})

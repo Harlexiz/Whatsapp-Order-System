@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { ErrorBoundary } from "react-error-boundary"
 import ProductTab from './ProductTab'
 import { useTestFetchProducts } from '../../hooks/clientApi'
 import ProductCard from './ProductCard'
@@ -9,7 +10,7 @@ interface Tabs {
 }
 
 const categoryTabs: Tabs[] = [
-  { name: "All", value: 'all' },
+  { name: "All", value: '' },
   { name: "Electronics", value: 'Electronics' },
   { name: "Home & Kitchen", value: 'Home & Kitchen' },
   { name: "Audio", value: 'Audio' },
@@ -29,16 +30,42 @@ const categoryTabs: Tabs[] = [
 
 export default function Product() {
   //Set Category key
-  const [fetchCategory, setFetchCategory] = useState<string>("all")
+  const [fetchCategory, setFetchCategory] = useState<string>("")
+  const [page, setPage] = useState<number>(1);
+
+  console.log("Page number is ",)
 
   //Fecth Test Products
 
-  const { data: testProducts, isLoading } = useTestFetchProducts(fetchCategory)
+  const { data: testProducts, isLoading, isError, error, refetch } = useTestFetchProducts(fetchCategory, page)
 
-  console.log("My fetxg cat is ", fetchCategory)
+
+  //Handles Tab changes
+  const handleCategoryChange = useCallback((newCategory: string) => {
+    setFetchCategory(newCategory);
+    setPage(1);
+  }, [])
+
+
+  // handle
+
+
+  const handlePrevPagination = () => {
+    if (page <= 1) {
+      setPage(1)
+      return
+    }
+    setPage((p) => p - 1)
+  }
+
+
+
+
+
   return (
+
     <section className='py-10  mt-5 scroll-mt-10' id='catalog'>
-      <div className={`container ${isLoading ? 'min-h-[200px]':''}`}>
+      <div className={`container ${isLoading ? 'min-h-[200px]' : ''}`}>
         <div className="mb-4">
           <h2 className="text-2xl sm:text-3xl font-bold  tracking-wide text-gray-900 text-center ">
             Product Catalogue
@@ -54,7 +81,7 @@ export default function Product() {
                    [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >'>
           {categoryTabs.map((item) => (
-            <ProductTab key={item.name} name={item.name} value={item.value} setCategory={setFetchCategory} activeCategory={fetchCategory} />
+            <ProductTab key={item.name} name={item.name} value={item.value} onCategoryChange={handleCategoryChange} activeCategory={fetchCategory} />
           ))}
 
         </div>
@@ -70,7 +97,7 @@ export default function Product() {
               {categoryTabs.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => setFetchCategory(item.value)}
+                  onClick={() => handleCategoryChange(item.value)}
                   className={`shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full border transition-colors
                       ' text-neutral-600 border-gray-300  hover:bg-custom-gold  hover:text-white hover:border-custom-gold
                        ${fetchCategory === item.value ? 'bg-custom-gold text-white border-custom-gold' : 'text-gray-500 border-gray-300'}`}
@@ -90,22 +117,57 @@ export default function Product() {
               <div>
                 Loading jooro rore.......
               </div>
+            ) : isError ? (
+              <div>Fialed to load | {error?.message}
+                <button
+                  onClick={() => refetch()}
+                  className='px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition'
+                >
+                  Try Again
+                </button>
+
+              </div>
+
             )
               : testProducts?.data.products.length === 0 ?
                 (<div className='text-sm text-gray-500 text-center'>No items in this category</div>)
                 :
                 (
-                  <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-                    {testProducts?.data.products.map((eachProduct) => (
-                      <ProductCard key={eachProduct._id} product={eachProduct} />
-                    ))}
+                  <div className=''>
+                    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                      {testProducts?.data.products?.map((eachProduct) => (
+                        <ProductCard key={eachProduct._id} product={eachProduct} />
+                      ))}
+                    </div>
+
+
+                    {/* Nav bars*/}
+                    <div className='mt-8 text-center flex justify-between'>
+                      <div>
+                        <button onClick={() => setPage((p) => p - 1)} disabled={!testProducts?.data.pagination.hasPrevPage}
+                          className={`text-sm px-2 py-1   ml-2 rounded-sm bg-custom-gold text-white ${!testProducts?.data.pagination.hasPrevPage ? " cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
+                          Prev
+                        </button>
+                        <button onClick={() => setPage((p) => p + 1)}
+                          className={`text-sm px-2 py-1  ml-2 rounded-sm bg-custom-gold text-white ${!testProducts?.data.pagination.hasNextPage ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                          disabled={!testProducts?.data.pagination.hasNextPage}>Next</button>
+                      </div>
+
+                       <p className='text-sm'>Page {page} of {testProducts?.data.pagination.totalPages}</p>
+
+                    </div>
+
+                   
+
                   </div>
                 )
 
           }
 
         </div>
+
       </div>
     </section>
+
   )
 }

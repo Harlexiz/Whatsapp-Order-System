@@ -9,16 +9,23 @@ export interface CartItem {
     _id: string,
     name: string,
     unitPrice: number,
-    description: string,
     category: string,
-    purchaseQty: number,
     isAvailable: boolean,
-    image?: string,
+    imageUrl: string,
+    createdAt: Date;
+    updatedAt: Date;
+    purchaseQty: number,
+    
     oldPrice?: number,
     priceChanged?: boolean,
-    // reviewNeeded?: boolean
-}
 
+
+}
+//  name: string;
+//     unitPrice: number;
+//     category: string;
+//     isAvailable: boolean;
+//     imageUrl: string;
 
 type AcknowledgementOption = "keep" | "discard";
 
@@ -189,7 +196,7 @@ export const useCartStore = create<CartState>()(
                         })
                         return {
                             products: myProducts,
-                            priceChanges: false, 
+                            priceChanges: false,
                             priceChangeCount: 0
                         }
 
@@ -220,7 +227,7 @@ export const useCartStore = create<CartState>()(
                         products: myProducts,
                         priceChangeCount: newCount,
                         priceChanges: state.priceChangeCount > 0
-                       
+
                     }
                 })
             }

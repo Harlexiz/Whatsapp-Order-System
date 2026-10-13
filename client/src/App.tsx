@@ -3,8 +3,8 @@ import { useState, useRef, lazy, Suspense } from 'react'
 // import viteLogo from './assets/vite.svg'
 // import heroImg from './assets/hero.png'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
-import {ToastContainer} from 'react-toastify'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ToastContainer } from 'react-toastify'
 import Header from './components/header/Header'
 import Hero from './components/hero/Hero'
 import Footer from './components/footer/Footer'
@@ -13,6 +13,7 @@ import About from './components/about/About'
 import HowItWorks from './components/how/How'
 import Test from './components/Test';
 import Product from './components/catalog/Product';
+import { ErrorBoundary } from 'react-error-boundary';
 // const About = lazy(() => import('./components/about/About').then(module => { console.log("About Compoinent Loaded"); return module }))
 
 
@@ -34,9 +35,9 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ToastContainer  theme='light'  autoClose={500}/>
-        <ReactQueryDevtools  initialIsOpen={false}  />
-       
+        <ToastContainer theme='light' autoClose={500} />
+        <ReactQueryDevtools initialIsOpen={false} />
+
         <Header />
         <Hero />
 
@@ -45,9 +46,12 @@ function App() {
         <HowItWorks />
         {/* <Test /> */}
 
-        <div id='' className=''>
-          <Product />
-        </div>
+        <ErrorBoundary FallbackComponent={() => <div>Something went wrong</div>}>
+          <div id='' className=''>
+            <Product />
+          </div>
+        </ErrorBoundary>
+
         <Footer />
 
       </QueryClientProvider>
