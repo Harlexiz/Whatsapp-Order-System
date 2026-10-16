@@ -3,6 +3,7 @@ import { ErrorBoundary } from "react-error-boundary"
 import ProductTab from './ProductTab'
 import { useTestFetchProducts } from '../../hooks/clientApi'
 import ProductCard from './ProductCard'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 interface Tabs {
   name: string,
@@ -12,7 +13,7 @@ interface Tabs {
 const categoryTabs: Tabs[] = [
   { name: "All", value: '' },
   { name: "Electronics", value: 'Electronics' },
-  { name: "Home & Kitchen", value: 'Home & Kitchen' },
+  { name: "Home & Kitchen", value: 'Home' },
   { name: "Audio", value: 'Audio' },
   { name: "Apparel", value: 'Apparel' },
   { name: "Origo", value: 'Origo' },
@@ -114,8 +115,14 @@ export default function Product() {
         <div className=' mt-4 py-6  '>
           {
             isLoading ? (
-              <div>
-                Loading jooro rore.......
+              <div className='flex items-center justify-center flex-col gap-1.5'>
+                <div
+                  className="h-9 w-9 animate-spin rounded-full border-4 border-gray-200 border-t-custom-gold"
+                  role="status"
+                  aria-label="Loading"
+                >
+                </div>
+                <p className='text-gray-500 text-sm'>Loading...</p>
               </div>
             ) : isError ? (
               <div>Fialed to load | {error?.message}
@@ -141,23 +148,23 @@ export default function Product() {
                     </div>
 
 
-                    {/* Nav bars*/}
+                    {/* Pagination buttons*/}
                     <div className='mt-8 text-center flex justify-between'>
                       <div>
                         <button onClick={() => setPage((p) => p - 1)} disabled={!testProducts?.data.pagination.hasPrevPage}
-                          className={`text-sm px-2 py-1   ml-2 rounded-sm bg-custom-gold text-white ${!testProducts?.data.pagination.hasPrevPage ? " cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
-                          Prev
+                          className={`text-sm p-2 border   ml-2 rounded-sm  text-black ${!testProducts?.data.pagination.hasPrevPage ? " cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
+                          <FaChevronLeft />
                         </button>
                         <button onClick={() => setPage((p) => p + 1)}
-                          className={`text-sm px-2 py-1  ml-2 rounded-sm bg-custom-gold text-white ${!testProducts?.data.pagination.hasNextPage ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-                          disabled={!testProducts?.data.pagination.hasNextPage}>Next</button>
+                          className={`text-sm p-2  ml-2 rounded-sm border text-black ${!testProducts?.data.pagination.hasNextPage ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                          disabled={!testProducts?.data.pagination.hasNextPage}><FaChevronRight /> </button>
                       </div>
 
-                       <p className='text-sm'>Page {page} of {testProducts?.data.pagination.totalPages}</p>
+                      <p className='text-sm'>Page {page} of {testProducts?.data.pagination.totalPages}</p>
 
                     </div>
 
-                   
+
 
                   </div>
                 )

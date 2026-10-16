@@ -22,7 +22,7 @@ export default function CartList({ product }: CartListProps) {
         <li key={product._id} className={`border-b border-gray-200 flex gap-4 py-5 sm:gap-6  mb-4 p-4 shadow-md ${product.priceChanged ? 'bg-yellow-100' : ''}`}>
             {/*Product Image */}
             <img
-                src={product.image}
+                src={product.imageUrl}
                 alt={product.name}
                 className="h-20 w-20 flex-none object-cover sm:h-24 sm:w-24 text-xs flex items-center justify-center block bg-gray-300 rounded-md"
             />
@@ -34,7 +34,7 @@ export default function CartList({ product }: CartListProps) {
                             {product.name}
                         </p>
                         <p className="mt-0.5 text-xs text-[#6B6558]">
-                            Category
+                            {product.category}
                         </p>
                     </div>
                     <button

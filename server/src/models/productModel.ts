@@ -8,6 +8,7 @@ export interface IProduct {  //Shape of my Schema
     category: string;
     isAvailable: boolean;
     imageUrl: string;
+    purchaseQty: number;
 
 }
 
@@ -55,6 +56,12 @@ const productSchema = new Schema<IProduct>({
         type: String,
         required: true
     },
+
+    purchaseQty: {
+        type: Number,
+        default: 1
+    },
+   
 
 
 }, { timestamps: true })

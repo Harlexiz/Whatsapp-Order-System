@@ -125,7 +125,8 @@ interface Pro {
   unitPrice: number,
   category: string,
   isAvailable: boolean,
-  imageUrl: string
+  imageUrl: string,
+  purchaseQty?: number
 }
 
 
@@ -139,6 +140,7 @@ export const productData: Pro[] = [
     category: 'Electronics',
     isAvailable: true,
     imageUrl: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500',
+    
   },
   {
     name: 'Mechanical Gaming Keyboard',

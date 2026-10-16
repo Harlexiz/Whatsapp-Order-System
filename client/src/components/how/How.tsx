@@ -22,7 +22,7 @@ let steps: Step[] = [
         title: "Browse Products",
         description: "Explore our catalog and find the products you want to order.",
         icon: <FaSearch />,
-        color: "#CBB9FF",
+        color: "#3b4cff",
 
     },
 
@@ -31,7 +31,7 @@ let steps: Step[] = [
         title: "Add to Cart",
         description: "Select your products and choose the quantity you need.",
         icon: <FaShoppingCart />,
-        color: "#FFC5B9"
+        color: "#ffc933"
 
     },
 
@@ -40,7 +40,7 @@ let steps: Step[] = [
         title: "Review Your Order",
         description: "Check your items, quantities, and total before placing your order.",
         icon: <FaClipboardCheck />,
-        color: "#99B2FF"
+        color: "#12b886"
     },
 
     {

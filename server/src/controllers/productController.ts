@@ -52,7 +52,7 @@ export async function verifyCart(req: Request, res: Response) {
     console.log("Verifying cart")
 
     try {
-        const initial = Date.now()
+      
         // Get all the products tp be verified.
         const { cartProducts } = req.body
 

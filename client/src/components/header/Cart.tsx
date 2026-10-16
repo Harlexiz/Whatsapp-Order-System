@@ -36,14 +36,15 @@ const reconcileCart = (
 export default function Cart() {
     console.log("Adding joor o")
 
-    const { productList, cartValue, priceChanged, itemsRemovedAfterVerification, updateChanges, changeCount } = useCartStore((
+    const { productList, cartValue, priceChanged, itemsRemovedAfterVerification, updateChanges, changeCount, clearCart } = useCartStore((
         useShallow((state) => ({
             productList: state.products,
             cartValue: state.getCartValue,
             priceChanged: state.priceChanges,
             itemsRemovedAfterVerification: state.ommittedItems,
             updateChanges: state.acknowledgeChanges,
-            changeCount: state.priceChangeCount
+            changeCount: state.priceChangeCount,
+            clearCart: state.clearCart
 
         }))
     ))
@@ -65,21 +66,18 @@ export default function Cart() {
         }
 
         // Get Verifying data
-        
         const productsToVerify = prepareProductsForVerification(productList)
 
         mutate(productsToVerify, {
             onSuccess: (data) => {
                 const { verifiedItems, priceChanges, nonExistentItems, needsReview } = data.data
-               
                 reconcileCart(verifiedItems, priceChanges, nonExistentItems)
 
                 //if cart needs review, cross check orders and see what changed else submit my order on whatsapp
                 if (needsReview) {
-                    toast.error("You np dey go anywhere")
+                    toast.error("You no dey go anywhere")
                     return
                 }
-
                 toast.success("Me i no need am o")
             },
             onError: (error) => {
@@ -159,6 +157,12 @@ export default function Cart() {
                                 </ul>
                             )
                         }
+
+                        {/*Clear cart button */}
+                       {productList.length > 0  &&  
+                       <button onClick={clearCart}
+                       className='mt-4 cursor-pointer bg-red-600 px-4 py-2 rounded-full text-white text-sm font-medium'>Clear Cart</button>
+                       }
 
                         {/*Keep Discard button */}
                         {changeCount > 0 &&
