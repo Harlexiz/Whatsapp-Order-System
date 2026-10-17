@@ -9,7 +9,7 @@ import axios from 'axios'
 import Footer from '../footer/Footer'
 
 
-
+//Get the products details to send to backend
 const prepareProductsForVerification = (productList: CartItem[]) => {
     return productList.map((item) => ({
         _id: item._id,
@@ -18,6 +18,8 @@ const prepareProductsForVerification = (productList: CartItem[]) => {
     }))
 }
 
+
+// Cart reconcilation after verifying cart
 const reconcileCart = (
     verifiedItems: CartItem[],
     priceChanges: CartItem[],
@@ -31,10 +33,25 @@ const reconcileCart = (
     })
 }
 
+const SELLER_NUMBER = "2348162846119"; // international format: no +, no spaces, no leading 0
+
+const buildWhatsAppUrl = (orderID: string) => {
+
+    const total = 2000;
+
+    const message = `Hello, I'd like to place an order:\nTotal: ₦${total.toLocaleString()}\nOrder ID: ${orderID}`;
+    //  const messag = `Hello, I'd like to place an order:\n\n${lines.join("\n")}\n\nTotal: ₦${total.toLocaleString()}`;
+
+
+    return `https://wa.me/${SELLER_NUMBER}?text=${encodeURIComponent(message)}`;
+};
+
+
 
 
 export default function Cart() {
     console.log("Adding joor o")
+
 
     const { productList, cartValue, priceChanged, itemsRemovedAfterVerification, updateChanges, changeCount, clearCart } = useCartStore((
         useShallow((state) => ({
@@ -70,7 +87,8 @@ export default function Cart() {
 
         mutate(productsToVerify, {
             onSuccess: (data) => {
-                const { verifiedItems, priceChanges, nonExistentItems, needsReview } = data.data
+                const { verifiedItems, priceChanges, nonExistentItems, needsReview, orderID } = data.data
+                console.log("The returend data ", data.data)
                 reconcileCart(verifiedItems, priceChanges, nonExistentItems)
 
                 //if cart needs review, cross check orders and see what changed else submit my order on whatsapp
@@ -78,7 +96,14 @@ export default function Cart() {
                     toast.error("You no dey go anywhere")
                     return
                 }
-                toast.success("Me i no need am o")
+               
+                if (!orderID) {
+                    toast.error("Could not create your order, please try again");
+                    return;
+                }
+                console.log
+                toast.success(`Opening Whatssap ${orderID}`)
+                window.location.href = buildWhatsAppUrl(orderID)
             },
             onError: (error) => {
                 // toast.error(error.response?.data.message)
@@ -87,7 +112,7 @@ export default function Cart() {
                 }
             },
             onSettled: () => {
-
+                // Runs regardless of the outcome
 
             }
         })
@@ -159,10 +184,10 @@ export default function Cart() {
                         }
 
                         {/*Clear cart button */}
-                       {productList.length > 0  &&  
-                       <button onClick={clearCart}
-                       className='mt-4 cursor-pointer bg-red-600 px-4 py-2 rounded-full text-white text-sm font-medium'>Clear Cart</button>
-                       }
+                        {productList.length > 0 &&
+                            <button onClick={clearCart}
+                                className='mt-4 cursor-pointer bg-red-600 px-4 py-2 rounded-full text-white text-sm font-medium'>Clear Cart</button>
+                        }
 
                         {/*Keep Discard button */}
                         {changeCount > 0 &&

@@ -12,13 +12,12 @@ export interface CartItem {
     category: string,
     isAvailable: boolean,
     imageUrl: string,
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
     purchaseQty: number,
     
     oldPrice?: number,
     priceChanged?: boolean,
-
 
 }
 //  name: string;

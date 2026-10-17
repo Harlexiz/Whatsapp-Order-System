@@ -1,17 +1,18 @@
-
+import {Types} from 'mongoose'
 export interface CartItem {
-  _id: string,
+  _id: string | Types.ObjectId,
   name: string,
   unitPrice: number,
-  description: string,
+  description?: string,
   category: string,
-  purchaseQty: number,
+  purchaseQty?: number,
   isAvailable: boolean,
   image?: string,
   oldPrice?: number,
   priceChanged?: boolean
  
 }
+
 
 
 

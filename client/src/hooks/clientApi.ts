@@ -83,7 +83,9 @@ interface VerificationResponse {
   needsReview: boolean,
   verifiedItems: CartItem[],
   priceChanges: CartItem[],
-  nonExistentItems: number
+  nonExistentItems: number,
+  orderID?: string
+ 
 }
 
 export const useVerifyCart = () => {
