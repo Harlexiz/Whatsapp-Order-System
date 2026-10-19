@@ -8,10 +8,8 @@ export default function AdminLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
-    console.log("Menu Toggled")
-    console.log("Before ", isSidebarOpen)
     setIsSidebarOpen((prev) => !prev);
-    console.log(isSidebarOpen)
+   
   };
 
   return (

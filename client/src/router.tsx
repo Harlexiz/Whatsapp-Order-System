@@ -3,6 +3,7 @@ import HomePage from './components/HomePage'
 import AdminLayout from './components/admin/AdminLayout'
 import Protected from './components/admin/Protected'
 import Dashboard from './components/admin/children/Dashboard'
+import Login from './components/admin/Login'
 
 
 
@@ -14,7 +15,7 @@ export const router = createBrowserRouter([
 
     {
         path: "/admin/login",
-        element: <div>Admin Login</div>
+        element: <Login />
     },
     {
         path: '/admin',

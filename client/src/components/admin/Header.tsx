@@ -34,7 +34,7 @@ export default function AdminHeader({ toggleMenu }: Props) {
                 AO
             </div>
 
-            {openMenu && <div className="absolute px-8 py-2 bg-custom-gold top-[120%] rounded-lg flex flex-col gap-2">
+            {openMenu && <div className="absolute right-8 px-8 py-2 bg-custom-gold top-[120%] rounded-lg flex flex-col gap-2">
                 <p className="text-sm  text-white">Profile</p>
                 <p className="text-sm  text-white">Logout</p>
 
