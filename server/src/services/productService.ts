@@ -98,6 +98,8 @@ export async function verifyCartService(productItems: ProductItem[]) {
 export interface ProductFilter {
     pageNo?: number,
     category?: string | undefined,
+    isAvailable?: boolean,
+    limit?: number
 
 }
 
@@ -111,12 +113,12 @@ interface FetchProductReturn {
 }
 
 
-export async function fetchProductService({ category, pageNo = 1 }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
+export async function fetchProductService({ category, pageNo = 1, isAvailable = true, limit = 6 }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
 
 
     //Partial ensures strict type based on the interface IProduct
     //QueryFilter allows arbitrary(random) properties
-    const query: QueryFilter<IProduct> = { isAvailable: true };
+    const query: QueryFilter<IProduct> = { isAvailable};
 
     // Business rule: "all" or no category means no category filter
     if (category && category !== "all") {
@@ -124,8 +126,7 @@ export async function fetchProductService({ category, pageNo = 1 }: ProductFilte
         query.category = category;
     }
 
-    console.log(`Query is ${query[0]}`)
-
+   
     //WHEN TO USE .lean()
 
     //1.Read - Only API Endpoints: When fetching data solely to render UI or send JSON responses(e.g., res.json(users)).
@@ -141,13 +142,13 @@ export async function fetchProductService({ category, pageNo = 1 }: ProductFilte
 
 
 
-    console.log("Page no before sub ", pageNo)
-    let skip = (pageNo - 1) * 6;
-    console.log("The value of skip is ", skip)
+
+    let skip = (pageNo - 1) * limit;
+   
     // Ensures the plain object have the shape of ProductLean
 
     const [myFetchedProducts, totalProducts] = await Promise.all([ // all helps me to run multiple request concurrently
-        productModel.find(query).skip(skip).limit(6).select("-createdAt -updatedAt -__v").lean<ProductLean[]>(),
+        productModel.find(query).skip(skip).limit(limit).select("-createdAt -updatedAt -__v").lean<ProductLean[]>(),
         productModel.countDocuments(query)
 
     ])  // Runs both queries concurrently

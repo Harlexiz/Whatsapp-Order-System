@@ -1,10 +1,12 @@
-import express, {type Application} from "express";
-import type {NextFunction, Request, Response} from 'express'
+import express, { type Application } from "express";
+import type { NextFunction, Request, Response } from 'express'
 import 'dotenv/config'
 import cors from 'cors'
 import { productRouter } from "./routes/productRoutes.js";
 import connectDB from "./config.js/db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { sessionMiddleware } from "./config.js/session.js";
+import { adminRouter } from "./routes/adminRoutes.js";
 
 
 
@@ -18,10 +20,15 @@ myApp.use(cors({
     credentials: true
 }))
 
+
+// SESSION VALIDATED HERE on every request: reads the cookie, verifies the signature,
+// looks the ID up in MongoDB, and fills req.session if it's found and not expired.
+myApp.use(sessionMiddleware)
+
 //Database connection
 connectDB()
 
-myApp.get('/', (req:Request, res:Response)=>{
+myApp.get('/', (req: Request, res: Response) => {
     res.send("Welcome to my Server!!!=")
 })
 
@@ -29,12 +36,13 @@ myApp.get('/', (req:Request, res:Response)=>{
 
 // Routers
 myApp.use('/api/products', productRouter)
+myApp.use('/api/auth', adminRouter)
 
 
 
 //Error Handler
 myApp.use(errorHandler)
 
-myApp.listen(PORT, ()=>{
+myApp.listen(PORT, () => {
     console.log("Server listening on port ", PORT)
 })

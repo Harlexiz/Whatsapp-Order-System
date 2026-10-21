@@ -17,13 +17,15 @@ export async function fetchProducts(req: Request, res: Response, next: NextFunct
 
     const category = typeof req.query.category === "string" ? req.query.category : undefined
     const pageNo = Number(req.query.pageNo)
+    const limit = Number(req.query.limit)
+    const isAvailable = typeof req.query.isAvailable === "boolean" ? req.query.isAvailable : true
     // console.log("The data type is ", typeof(req.query.pageNo))
 
     // console.log("The no sent was ", req.query.pageNo)
     // console.log("Category before passing ", category)
 
     //Pass to service
-    const fetchedProducts =  await fetchProductService({ category, pageNo });
+    const fetchedProducts =  await fetchProductService({ category, pageNo, limit, isAvailable });
      const {products, pagination} = fetchedProducts
     //This is used to throw error
     // if (!product) {
