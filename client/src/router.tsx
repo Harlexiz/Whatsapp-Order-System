@@ -9,7 +9,7 @@ import Login from './components/admin/Login'
 
 export const router = createBrowserRouter([
     {
-        path: "",
+        path: "/",
         element: <HomePage />,
     },
 

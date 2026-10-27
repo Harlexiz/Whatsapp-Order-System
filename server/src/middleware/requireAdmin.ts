@@ -19,6 +19,6 @@ export async function requireAdmin(req:Request, res:Response, next:NextFunction)
     req.admin = admin;
     next();
   } catch (err) {
-    next(err);
+    next(err); // Passes error to error handler
   }
 }

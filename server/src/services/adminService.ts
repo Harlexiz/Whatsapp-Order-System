@@ -23,8 +23,9 @@ const toPublic = (admin: MyAdmin) => (
 export async function verifyCredentials(email: string, password: string) {
 
     const admin = await adminModel.findOne({ email: email.toLowerCase(), role: "admin" }); // Fetches admin
-
+   
     const ok = await bcrypt.compare(password, admin ? admin.passwordHash : DUMMY_HASH); // CHecks if password matches 
+  
 
     if (!admin || !ok) {
         throw new AppError('Invalid email or password', 401)

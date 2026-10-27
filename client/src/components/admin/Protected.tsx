@@ -1,5 +1,6 @@
 import React, { useEffect, useState, type ReactNode } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useCurrentUser } from '../../hooks/adminQuery';
 
 
 interface ProtectedProps {
@@ -8,22 +9,22 @@ interface ProtectedProps {
 
 export default function Protected({ children }: ProtectedProps) {
     // const { data: admin, isLoading } = useAdminQuery();
+
+    const { data: admin, isLoading } = useCurrentUser()
     const location = useLocation();
 
-    const admin: boolean = true
-
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, []);
-
     if (isLoading) {
-        return <div className="p-6">Checking access...</div>;
+        return (
+            <div className='flex items-center justify-center flex-col gap-1.5 h-screen'>
+                <div
+                    className="h-9 w-9 animate-spin rounded-full border-4 border-gray-200 border-t-custom-gold"
+                    role="status"
+                    aria-label="Loading"
+                >
+                </div>
+                <p className='text-gray-500 text-sm'>Please wait...</p>
+            </div>
+        )
     }
 
     if (!admin) {

@@ -1,6 +1,10 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-
+import { useCurrentUser, useLogin } from '../../hooks/adminQuery';
+import { Navigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from "axios";
+import { toast } from 'react-toastify';
 
 
 interface LoginFormData {
@@ -10,15 +14,36 @@ interface LoginFormData {
 
 export default function Login() {
 
+    const { data: admin } = useCurrentUser()
+
+    console.log("The Current Admin is ", admin)
+
+
     const {
         register, handleSubmit, formState: { errors, isSubmitting }, } = useForm<LoginFormData>({
             mode: "all"
         });
 
+    const { mutate, isPending} = useLogin()
 
+
+    //If user is alread logged in
+    if (admin) {
+        return <Navigate to="/admin" replace />
+    }
     const onSubmit = (data: LoginFormData) => {
         console.log(data);
+
         // Call your login API here
+        mutate({ email: data.email, password: data.password }, {
+            onError: (error) => {
+                const err = error as AxiosError<{ message: string }>;
+                const message = err.response?.data?.message
+                console.log("The Error Was ", message)
+                toast.error(message)
+            }
+        })
+
     };
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -86,11 +111,11 @@ export default function Login() {
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-blue-600 text-white py-3 rounded-md
-                     hover:bg-blue-700 disabled:opacity-50"
+                    disabled={isPending}
+                    className="w-full bg-custom-gold font-medium cursor-pointer text-white py-3 rounded-md
+                      disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isSubmitting ? "Logging in..." : "Login"}
+                    {isPending ? "Logging in..." : "Login"}
                 </button>
             </form>
         </div>

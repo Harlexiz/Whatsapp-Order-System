@@ -74,9 +74,7 @@ interface VerificationData {
 
 
 
-interface ApiResponse<T> {
-  data: T
-}
+
 
 
 interface VerificationResponse {
