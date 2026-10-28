@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { ErrorBoundary } from "react-error-boundary"
 import ProductTab from './ProductTab'
-import { useTestFetchProducts } from '../../hooks/clientApi'
+import { useFetchProducts } from '../../hooks/clientApi'
 import ProductCard from './ProductCard'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
@@ -37,8 +37,8 @@ export default function Product() {
   console.log("Page number is ",)
 
   //Fecth Test Products
-
-  const { data: testProducts, isLoading, isError, error, refetch } = useTestFetchProducts(fetchCategory, page)
+  const limit:number = 6
+  const { data: testProducts, isLoading, isError, error, refetch } = useFetchProducts(fetchCategory, page, limit)
 
 
   //Handles Tab changes

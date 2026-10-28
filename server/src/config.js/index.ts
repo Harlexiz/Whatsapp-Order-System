@@ -9,6 +9,6 @@ export const config = {
   port: Number(process.env.PORT) || 3000,
   mongoUri: process.env.MONGODB_URI,
   sessionSecret: process.env.SESSION_SECRET,
-  sessionTtlMs: 2 * 60 * 1000, // 2 hours of inactivity
+  sessionTtlMs: 2 * 60 * 60 * 1000, // 2 hours of inactivity
   cookieName: 'asoebi_admmin.sid',
 };

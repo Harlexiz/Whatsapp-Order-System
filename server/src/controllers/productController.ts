@@ -3,6 +3,7 @@ import { products, type CartItem } from '../product.Data.js'
 import { verifyCartService, fetchProductService } from '../services/productService.js'
 import { productModel } from '../models/productModel.js'
 import { Document } from 'mongoose'
+import { getPagination } from '../utils/pagination.js'
 
 
 interface HttpParams {
@@ -14,20 +15,21 @@ interface HttpParams {
 
 //Fech All Products
 export async function fetchProducts(req: Request, res: Response, next: NextFunction) {
-
+     console.log("Route accesssed")
     const category = typeof req.query.category === "string" ? req.query.category : undefined
-    const pageNo = Number(req.query.pageNo)
-    const limit = Number(req.query.limit)
-    const isAvailable = typeof req.query.isAvailable === "boolean" ? req.query.isAvailable : true
-    // console.log("The data type is ", typeof(req.query.pageNo))
-
-    // console.log("The no sent was ", req.query.pageNo)
-    // console.log("Category before passing ", category)
-
-    //Pass to service
-    const fetchedProducts =  await fetchProductService({ category, pageNo, limit, isAvailable });
+    const pageNo = Number(req.query.pageNo) 
+    const limit = Number(req.query.limit) || 6
+    
+    //If isAvailable params is missing, set to true else check if it is true/false
+    const isAvailable =req.query.isAvailable === undefined ? true : req.query.isAvailable === "true"
+  
+    const {formatedLimit, formatedPageNo, skip} = getPagination(req.query)
+ 
+    const fetchedProducts =  await fetchProductService({ category, pageNo: formatedPageNo, limit: formatedLimit, isAvailable, skip });
+      
      const {products, pagination} = fetchedProducts
-    //This is used to throw error
+    
+     //This is used to throw error
     // if (!product) {
     //     throw new AppError("Product not found", 404);
     // }

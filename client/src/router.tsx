@@ -38,6 +38,10 @@ export const router = createBrowserRouter([
             {
                 path: 'product',
                 element: <div>Produsts</div>
+            }, {
+                path: 'profile',
+                element: <div>Profile</div>,
+                
             }
         ]
     },

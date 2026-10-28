@@ -7,9 +7,7 @@ export const productRouter = express.Router()
 
 
 
-productRouter.get('/all-products',requireAdmin, fetchProducts)
-
-
+productRouter.get('/all-products', fetchProducts)
 
 
 productRouter.post('/verify-cart', verifyCart)

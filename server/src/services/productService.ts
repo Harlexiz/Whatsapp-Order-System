@@ -99,7 +99,8 @@ export interface ProductFilter {
     pageNo?: number,
     category?: string | undefined,
     isAvailable?: boolean,
-    limit?: number
+    limit?: number,
+    skip?: number
 
 }
 
@@ -113,9 +114,9 @@ interface FetchProductReturn {
 }
 
 
-export async function fetchProductService({ category, pageNo = 1, isAvailable = true, limit = 6 }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
+export async function fetchProductService({ category, pageNo=1, isAvailable = true, limit=6, skip=0 }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
 
-
+   
     //Partial ensures strict type based on the interface IProduct
     //QueryFilter allows arbitrary(random) properties
     const query: QueryFilter<IProduct> = { isAvailable};
@@ -142,8 +143,8 @@ export async function fetchProductService({ category, pageNo = 1, isAvailable = 
 
 
 
-
-    let skip = (pageNo - 1) * limit;
+   console.log("Page no ", pageNo)
+   console.log("The skip that got here was ", skip)
    
     // Ensures the plain object have the shape of ProductLean
 

@@ -16,6 +16,11 @@ const sideBarLinks: SideBar[] = [
         label: 'Dashboard'
     },
     {
+       path:'profile',
+       label: 'Profile' 
+
+    },
+    {
         path: 'order',
         label: 'Orders'
     },

@@ -40,12 +40,12 @@ interface Product {
   }
 }
 
-export const useTestFetchProducts = (category: string | null, pageNo: number) => {
+export const useFetchProducts = (category: string | null, pageNo: number, limit: number) => {
   return useQuery<ApiResponse<Product>>({
     queryKey: ['test-products', category, pageNo],
     queryFn: async () => {
       const response = await api.get<ApiResponse<Product>>(`/products/all-products`, {
-        params: { category, pageNo }
+        params: { category, pageNo, limit }
       })
       return response.data  // Represents the whole backend reponse 
     },
