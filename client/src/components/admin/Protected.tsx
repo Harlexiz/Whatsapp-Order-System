@@ -8,7 +8,7 @@ interface ProtectedProps {
 }
 
 export default function Protected({ children }: ProtectedProps) {
-    // const { data: admin, isLoading } = useAdminQuery();
+
 
     const { data: admin, isLoading } = useCurrentUser()
     const location = useLocation();

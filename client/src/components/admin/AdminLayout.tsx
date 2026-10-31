@@ -17,11 +17,11 @@ export default function AdminLayout() {
       <div id="scrim" className={`fixed inset-0 z-40 ${isSidebarOpen ? '': 'hidden'}  bg-black/50 lg:hidden`} onClick={toggleSidebar}></div>
       <Aside isOpen={isSidebarOpen} />
 
-      <main className="flex-1">
+      <main className="flex-1 min-w-0">
         {/*Header */}
         <AdminHeader toggleMenu={toggleSidebar} />
 
-        <div className='py-10 min-h-screen px-4 sm:px-6'>
+        <div className='py-10 min-h-screen px-4 sm:px-6 bg-white min-w-0 '>
           <Outlet />
         </div>
 

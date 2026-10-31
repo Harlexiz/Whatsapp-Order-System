@@ -4,6 +4,7 @@ import AdminLayout from './components/admin/AdminLayout'
 import Protected from './components/admin/Protected'
 import Dashboard from './components/admin/children/Dashboard'
 import Login from './components/admin/Login'
+import AdminProducts from './components/admin/children/Products/AdminProducts'
 
 
 
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'product',
-                element: <div>Produsts</div>
+                element: <AdminProducts />
             }, {
                 path: 'profile',
                 element: <div>Profile</div>,
