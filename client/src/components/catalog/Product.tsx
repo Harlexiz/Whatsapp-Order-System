@@ -36,8 +36,8 @@ export default function Product() {
 
   console.log("Page number is ",)
 
-  //Fecth Test Products
-  const limit:number = 6
+  //Fecth Products
+  const limit: number = 6
   const { data: testProducts, isLoading, isError, error, refetch } = useFetchProducts(fetchCategory, page, limit)
 
 

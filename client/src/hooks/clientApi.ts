@@ -42,7 +42,7 @@ interface Product {
 
 export const useFetchProducts = (category: string | null, pageNo: number, limit: number) => {
   return useQuery<ApiResponse<Product>>({
-    queryKey: ['test-products', category, pageNo],
+    queryKey: ['all-products', category, pageNo],
     queryFn: async () => {
       const response = await api.get<ApiResponse<Product>>(`/products/all-products`, {
         params: { category, pageNo, limit }

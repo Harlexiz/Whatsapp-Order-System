@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../utils/api";
+import type { CartItem } from "../store/cartStore";
 
 
 // import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -20,7 +21,7 @@ export const useCurrentUser = () => {
     return useQuery<ApiResponse<AuthResponse>>({
         queryKey: ['current-user'],
         queryFn: async () => {
-            const response = await api.get<ApiResponse<AuthResponse>>('/auth/me')
+            const response = await api.get<ApiResponse<AuthResponse>>('/admin/auth/me')
             return response.data
         },
         staleTime: 5 * 60 * 1000,
@@ -44,7 +45,7 @@ export const  useLogin = ()=> {
 
     return useMutation({
         mutationFn: async ({email, password}: Credentials) => {
-            const response = await api.post<ApiResponse<AuthResponse>>('/auth/login', { email, password })
+            const response = await api.post<ApiResponse<AuthResponse>>('/admin/auth/login', { email, password })
             return response.data
         },
         onSuccess: (data) => {
@@ -58,11 +59,41 @@ export const useLogout = ()=>{
    const queryClient = useQueryClient();
    return useMutation({
     mutationFn: async ()=>{
-        return api.post('/auth/logout')
+        return api.post('/admin/auth/logout')
     },
     onSuccess: ()=>{
         queryClient.clear()
         queryClient.setQueryData(['current-user'], null)
     }
    })
+}
+
+
+
+
+//PRODUCTS
+
+interface Product {
+  products: CartItem[],
+  pagination: {
+    totalPages: number,
+    hasNextPage: boolean,
+    hasPrevPage: boolean
+  }
+}
+
+export const useFetchAdminProducts = (category: string | null, pageNo: number, limit: number) => {
+  return useQuery<ApiResponse<Product>>({
+    queryKey: ['admin-products', category, pageNo],
+    queryFn: async () => {
+      const response = await api.get<ApiResponse<Product>>(`/admin/product/all-products`, {
+        params: { category, pageNo, limit }
+      })
+      return response.data  // Represents the whole backend reponse 
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 0.5 * 60 * 1000,
+    refetchInterval: 0.5 * 60 * 1000,
+    refetchIntervalInBackground: false// ENsures no background refecth when component is not active
+  })
 }

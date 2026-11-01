@@ -36,7 +36,7 @@ myApp.get('/', (req: Request, res: Response) => {
 
 // Routers
 myApp.use('/api/products', productRouter)
-myApp.use('/api/auth', adminRouter)
+myApp.use('/api/admin', adminRouter)
 
 
 
