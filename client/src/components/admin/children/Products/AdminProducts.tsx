@@ -14,12 +14,13 @@ import Table from './Table';
 import EditModal from './EditModal';
 import { useFetchAdminProducts } from '../../../../hooks/adminQuery';
 import type { CartItem } from '../../../../store/cartStore';
+import Pagination from './Pagination';
 
 export default function AdminProducts() {
   // Search
 
   const [category, setCategory] = useState<string>("")
-  const [available, setAvailable] = useState<string>("")
+  const [available, setAvailable] = useState<boolean>(true)
   const [page, setPage] = useState<number>(1);
 
 
@@ -31,7 +32,7 @@ export default function AdminProducts() {
 
   //Fetch products from server
   const limit: number = 8
-  const { data: product, isLoading: productIsLoading, isError } = useFetchAdminProducts(category, page, limit)
+  const { data: product, isLoading: productIsLoading, isError } = useFetchAdminProducts(category, page, limit, available)
 
 
 
@@ -115,6 +116,14 @@ export default function AdminProducts() {
 
           {/*Pagination buttons */}
 
+          { (product?.data?.products?.length ?? 0) > 0  &&
+            <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={product?.data.pagination.totalPages ?? 0}
+            hasNextPage={product?.data.pagination.hasNextPage ?? false}
+            hasPrevPage={product?.data.pagination.hasPrevPage ?? false} />
+          }
 
         </div>
       </div>
@@ -126,7 +135,7 @@ export default function AdminProducts() {
         editingProduct && (
           <EditModal
             product={editingProduct}
-            onClose={() => setEditingProduct(null)}
+            onClose={setEditingProduct}
           />
         )
       }

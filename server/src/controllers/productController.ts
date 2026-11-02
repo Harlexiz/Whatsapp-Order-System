@@ -15,15 +15,20 @@ interface HttpParams {
 
 //Fech All Products
 export async function fetchProducts(req: Request, res: Response, next: NextFunction) {
-     console.log("Route accesssed")
+    
     const category = typeof req.query.category === "string" ? req.query.category : undefined
     const pageNo = Number(req.query.pageNo) 
     const limit = Number(req.query.limit) || 6
+
+    console.log("Recieved linit", limit)
     
     //If isAvailable params is missing, set to true else check if it is true/false
     const isAvailable =req.query.isAvailable === undefined ? true : req.query.isAvailable === "true"
+
+    console.log("My Request Query is ", req.query)
   
     const {formatedLimit, formatedPageNo, skip} = getPagination(req.query)
+    console.log("FOrmed limi is ", formatedLimit)
  
     const fetchedProducts =  await fetchProductService({ category, pageNo: formatedPageNo, limit: formatedLimit, isAvailable, skip });
       

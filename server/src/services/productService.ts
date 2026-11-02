@@ -143,9 +143,6 @@ export async function fetchProductService({ category, pageNo=1, isAvailable = tr
 
 
 
-   console.log("Page no ", pageNo)
-   console.log("The skip that got here was ", skip)
-   
     // Ensures the plain object have the shape of ProductLean
 
     const [myFetchedProducts, totalProducts] = await Promise.all([ // all helps me to run multiple request concurrently
@@ -154,7 +151,7 @@ export async function fetchProductService({ category, pageNo=1, isAvailable = tr
 
     ])  // Runs both queries concurrently
 
-    const totalPages = Math.ceil(totalProducts / 6)
+    const totalPages = Math.ceil(totalProducts / limit)
     return {
         products: myFetchedProducts,
         pagination: {

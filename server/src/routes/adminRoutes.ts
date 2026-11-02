@@ -1,5 +1,5 @@
 import express from 'express'
-import { adminLogin, adminLogout, getCurrentAdmin } from '../controllers/adminController.js'
+import { adminEditProduct, adminLogin, adminLogout, getCurrentAdmin } from '../controllers/adminController.js'
 import { loginRateLimiter } from '../middleware/rateLimiter.js'
 import { requireAdmin } from '../middleware/requireAdmin.js'
 import { fetchProducts } from '../controllers/productController.js'
@@ -23,3 +23,4 @@ adminRouter.get('/auth/me', requireAdmin, getCurrentAdmin)
 //PRODUCTS
 
 adminRouter.get('/product/all-products', fetchProducts)
+adminRouter.put('/product/edit-product/:id',  adminEditProduct)

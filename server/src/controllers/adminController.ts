@@ -2,7 +2,7 @@
 
 import type { NextFunction, Response, Request } from "express";
 import { AppError } from "../utils/appError.js";
-import { verifyCredentials } from "../services/adminService.js";
+import { updateProduct, verifyCredentials } from "../services/adminService.js";
 import { destroy, regenerate, save } from "../utils/sessionUtils.js";
 import { config } from "../config.js/index.js";
 
@@ -56,7 +56,7 @@ export function getCurrentAdmin(req: Request, res: Response) {
 }
 
 //Logout
-export async function adminLogout(req:Request, res:Response, next:NextFunction) {
+export async function adminLogout(req: Request, res: Response, next: NextFunction) {
     try {
         await destroy(req); // deletes the session document from MongoDB
         res.clearCookie(config.cookieName);
@@ -76,3 +76,49 @@ export async function adminLogout(req:Request, res:Response, next:NextFunction) 
 
 
 //==> Products <==//
+
+//Edit Product
+
+export async function adminEditProduct(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+
+    try {
+        const { name, category, isAvailable, unitPrice } = req.body;
+        const { id } = req.params
+
+        if (!id) {
+            throw new AppError("Product ID is required", 400);
+        }
+
+        console.log(req.body)
+
+        if (!name || typeof name !== "string") {
+            return res.status(400).json({ message: "Invalid Product Name" })
+        }
+
+        if (typeof unitPrice !== "number" || unitPrice < 0) {
+            return res.status(400).json({ message: "Invalid Price" })
+        }
+
+        if (!category || typeof category !== "string") {
+            return res.status(400).json({ message: "Invalid Category" })
+        }
+
+        if (typeof isAvailable !== "boolean") {
+            return res.status(400).json({ message: "Invalid Product Name" })
+        }
+
+
+
+
+        await updateProduct(id, req.body)
+
+        return res.status(200).json({
+            message: "Product updated successfully"
+        });
+
+
+        // res.status(200).json({ data: { admin } })
+    } catch (err) {
+        next(err);
+    }
+}
