@@ -19,9 +19,15 @@ export async function fetchProducts(req: Request, res: Response, next: NextFunct
     const category = typeof req.query.category === "string" ? req.query.category : undefined
     const pageNo = Number(req.query.pageNo) 
     const limit = Number(req.query.limit) || 6
+    
 
+    const searchKeyword = req.query.search as string
     console.log("Recieved linit", limit)
     
+    console.log("The type is ",typeof(req.query.search))
+    if(req.query.search){
+        console.log("Executed Search")
+    }
     //If isAvailable params is missing, set to true else check if it is true/false
     const isAvailable =req.query.isAvailable === undefined ? true : req.query.isAvailable === "true"
 
@@ -30,7 +36,8 @@ export async function fetchProducts(req: Request, res: Response, next: NextFunct
     const {formatedLimit, formatedPageNo, skip} = getPagination(req.query)
     console.log("FOrmed limi is ", formatedLimit)
  
-    const fetchedProducts =  await fetchProductService({ category, pageNo: formatedPageNo, limit: formatedLimit, isAvailable, skip });
+   
+    const fetchedProducts =  await fetchProductService({ category, pageNo: formatedPageNo, limit: formatedLimit, isAvailable, skip, search: searchKeyword });
       
      const {products, pagination} = fetchedProducts
     

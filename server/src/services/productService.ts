@@ -100,7 +100,8 @@ export interface ProductFilter {
     category?: string | undefined,
     isAvailable?: boolean,
     limit?: number,
-    skip?: number
+    skip?: number,
+    search?: string
 
 }
 
@@ -114,7 +115,7 @@ interface FetchProductReturn {
 }
 
 
-export async function fetchProductService({ category, pageNo=1, isAvailable = true, limit=6, skip=0 }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
+export async function fetchProductService({ category, pageNo=1, isAvailable = true, limit=6, skip=0, search }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
 
    
     //Partial ensures strict type based on the interface IProduct
@@ -125,6 +126,10 @@ export async function fetchProductService({ category, pageNo=1, isAvailable = tr
     if (category && category !== "all") {
         console.log("Block Executed")
         query.category = category;
+    }
+
+    if(search){
+        query.name =  { $regex: search, $options: "i" }
     }
 
    

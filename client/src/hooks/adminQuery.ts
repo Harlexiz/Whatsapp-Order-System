@@ -84,12 +84,12 @@ interface Product {
     }
 }
 
-export const useFetchAdminProducts = (category: string | null, pageNo: number, limit: number, isAvailable: boolean) => {
+export const useFetchAdminProducts = (category: string | null, pageNo: number, limit: number, isAvailable: boolean, search: string) => {
     return useQuery<ApiResponse<Product>>({
-        queryKey: ['admin-products', category, pageNo],
+        queryKey: ['admin-products', category, search, pageNo, isAvailable],
         queryFn: async () => {
             const response = await api.get<ApiResponse<Product>>(`/admin/product/all-products`, {
-                params: { category, pageNo, limit, isAvailable }
+                params: { category, pageNo, limit, isAvailable, search }
             })
             return response.data  // Represents the whole backend reponse 
         },

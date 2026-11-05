@@ -15,14 +15,77 @@ import EditModal from './EditModal';
 import { useFetchAdminProducts } from '../../../../hooks/adminQuery';
 import type { CartItem } from '../../../../store/cartStore';
 import Pagination from './Pagination';
+import useDebounce from '../../../../utils/debounce';
+import FilterButton, { type FilterOption } from './FilterButton';
+import SearchInput from './Search';
+
+
+
+
+
+
+
+const categories: FilterOption[] = [
+  { label: "All Categories", value: "" },
+  { label: "Sports", value: "Sports" },
+  { label: "Electronics", value: "Electronics" },
+  { label: "Home & Kitchen", value: "Home" },
+];
+
+const availabilityOptions: FilterOption[] = [
+  { label: "Available", value: true },
+  { label: "Unavailable", value: false },
+];
+
+
+
+
+
+
+
+
+
+
 
 export default function AdminProducts() {
+
+
+
   // Search
+  const [searchKeyword, setSearchKeyword] = useState<string>("")
 
   const [category, setCategory] = useState<string>("")
+
   const [available, setAvailable] = useState<boolean>(true)
   const [page, setPage] = useState<number>(1);
 
+
+  //Handles Search Changes
+  const handleSearchChange = (value: string) => {
+    setSearchKeyword(value);
+  };
+
+
+  //Handles Category Chnages 
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+  };
+
+  // Handles Availability Changes
+
+  const handleAvailabilityChange = (value: boolean) => {
+    setAvailable(value);
+
+  };
+
+
+
+
+
+  // Debounce query
+  const debounceSearchValue = useDebounce(searchKeyword, 700)
+
+  console.log("debounceing at ", debounceSearchValue)
 
   const [editingProduct, setEditingProduct] = useState<CartItem | null>(null)
 
@@ -30,54 +93,41 @@ export default function AdminProducts() {
   const [productToDeleteID, setProductToDeleteID] = useState(null)
 
 
+
+
+  // const formatAvailability = ()
   //Fetch products from server
   const limit: number = 8
-  const { data: product, isLoading: productIsLoading, isError } = useFetchAdminProducts(category, page, limit, available)
+  const { data: product, isLoading: productIsLoading, isError } = useFetchAdminProducts(category, page, limit, available, debounceSearchValue)
 
 
 
 
 
   return (
-    <section className="mx-auto w-full  rounded-xl  overflow-x-auto">
+    <section className="mx-auto w-full  overflow-x-auto">
 
-      Toolbar: search + two filters
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search
-            size={16}
-            aria-hidden="true"
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
-          />
-          <input
-            type="search"
+      <div className="flex flex-col md:flex-row gap-3 w-full">
+        <SearchInput
+          value={searchKeyword}
+          onChange={handleSearchChange}
+        />
 
-            placeholder="Search products by name"
-            aria-label="Search products"
-            className="h-10 w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-700/30"
-          />
-        </div>
+        <FilterButton
+          label="Category"
+          options={categories}
+          value={category}
+          onChange={handleCategoryChange}
+        />
 
-        <div className="flex gap-2">
-          {/* <FilterButton
-            icon={Tag}
-            label="Category"
-            value={category}
-            options={categories}
-            onChange={resetPageThen(setCategory)}
-          />
-
-          <FilterButton
-            icon={CircleDollarSign}
-            label="Price"
-            value={priceRange}
-            options={PRICE_RANGES.map((r) => r.label)}
-            onChange={resetPageThen(setPriceRange)}
-          /> */}
-          <button className='py-4 ml-4'>Category</button>
-          <button className='py-4'>Price</button>
-        </div>
+        <FilterButton
+          label="Availability"
+          options={availabilityOptions}
+          value={available}
+          onChange={handleAvailabilityChange}
+        />
       </div>
+
 
 
       <div>
@@ -100,7 +150,7 @@ export default function AdminProducts() {
             )
             : isError ?
               (
-                <div>Erorrroror</div>
+                <div className='text-center'>Erorrroror</div>
               )
 
               : (
@@ -116,13 +166,13 @@ export default function AdminProducts() {
 
           {/*Pagination buttons */}
 
-          { (product?.data?.products?.length ?? 0) > 0  &&
+          {(product?.data?.products?.length ?? 0) > 0 &&
             <Pagination
-            page={page}
-            setPage={setPage}
-            totalPages={product?.data.pagination.totalPages ?? 0}
-            hasNextPage={product?.data.pagination.hasNextPage ?? false}
-            hasPrevPage={product?.data.pagination.hasPrevPage ?? false} />
+              page={page}
+              setPage={setPage}
+              totalPages={product?.data.pagination.totalPages ?? 0}
+              hasNextPage={product?.data.pagination.hasNextPage ?? false}
+              hasPrevPage={product?.data.pagination.hasPrevPage ?? false} />
           }
 
         </div>

@@ -1,67 +1,90 @@
-import React from 'react'
+import { useState, useEffect, useRef } from "react";
+import { FaChevronDown } from "react-icons/fa";
 
-
-export default function FilterButton() {
-  return (
-    <div>
-      
-    </div>
-  )
+export interface FilterOption {
+  label: string;
+  value: string | boolean;
 }
 
+interface FilterDropdownProps {
+  label: string;
+  options: FilterOption[];
+  value: string;
+  onChange: (value: string) => void;
+}
 
+const FilterButton = ({label,options,
+  value,
+  onChange,
+}: FilterDropdownProps) => {
+  
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const selectedOption = options.find(
+    (option) => option.value === value
+  );
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
 
-function FilterButton({ icon: Icon, label, value, options, onChange }) {
-  const [open, setOpen] = useState(false);
-  const active = value !== options[0];
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
+      {/* Dropdown button */}
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        className={`inline-flex h-10 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 ${
-          active
-            ? "border-teal-700 bg-teal-50 text-teal-900"
-            : "border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
-        }`}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        className="flex items-center justify-between gap-3 px-4 py-3 border border-gray-300 rounded-lg text-sm min-w-36 hover:bg-gray-50 transition"
       >
-        <Icon size={16} aria-hidden="true" />
-        <span>{active ? value : label}</span>
-        <ChevronDown size={14} aria-hidden="true" />
+        <span>{selectedOption?.label || label}</span>
+
+        <FaChevronDown
+          className={`text-xs transition-transform ${isOpen ? "rotate-180" : ""
+            }`}
+        />
       </button>
 
-      {open && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <ul
-            role="listbox"
-            className="absolute right-0 z-20 mt-1 w-48 overflow-hidden rounded-lg border border-stone-200 bg-white py-1 shadow-lg"
-          >
-            {options.map((opt) => (
-              <li key={opt}>
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={opt === value}
-                  onClick={() => {
-                    onChange(opt);
-                    setOpen(false);
-                  }}
-                  className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-stone-700 hover:bg-stone-100"
-                >
-                  {opt}
-                  {opt === value && <Check size={14} className="text-teal-700" />}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
+      {/* Dropdown options */}
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-2 w-full min-w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+                onChange(option.value);
+                
+              }}
+              className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition ${value === option.value
+                  ? "bg-gray-100 font-medium"
+                  : ""
+                }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );
-}
+};
+
+export default FilterButton;
