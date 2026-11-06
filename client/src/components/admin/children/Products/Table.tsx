@@ -14,11 +14,11 @@ const headers: string[] = ["Product", "Category", "Unit Price", "Status", "Actio
 interface TableProps {
     productData: CartItem[],
     setEditingProduct: (product: CartItem) => void,
-    setDeleteProduct: () => void,
+    // setDeleteProduct: () => void,
     setDeleteID: (id: string) => void
 }
 
-export default function Table({ productData, setEditingProduct, setDeleteProduct, setDeleteID }: TableProps) {
+export default function Table({ productData, setEditingProduct,  setDeleteID }: TableProps) {
 
 
 
@@ -66,7 +66,10 @@ export default function Table({ productData, setEditingProduct, setDeleteProduct
                                             {/*Delete Button */}
                                             <button
                                                 type="button"
-
+                                                onClick={() => {
+                                
+                                                    setDeleteID(item._id)
+                                                }}
                                                 // aria-label={`Delete ${p.name}`}
                                                 className="inline-flex h-8 items-center cursor-pointer gap-1.5 rounded-md border border-red-200 px-2.5 text-xs font-medium text-red-700 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
                                             >

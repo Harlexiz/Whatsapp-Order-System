@@ -1,21 +1,23 @@
+import { Tag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
 export interface FilterOption {
   label: string;
-  value: string | boolean;
+  value: string;
 }
 
 interface FilterDropdownProps {
+  icon: React.ReactNode
   label: string;
   options: FilterOption[];
   value: string;
-  onChange: (value: string) => void;
+  onChange: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const FilterButton = ({label,options,
   value,
-  onChange,
+  onChange, icon: Icon
 }: FilterDropdownProps) => {
   
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +55,7 @@ const FilterButton = ({label,options,
         aria-expanded={isOpen}
         className="flex items-center justify-between gap-3 px-4 py-3 border border-gray-300 rounded-lg text-sm min-w-36 hover:bg-gray-50 transition"
       >
+        <span>{Icon}</span>
         <span>{selectedOption?.label || label}</span>
 
         <FaChevronDown
@@ -66,7 +69,7 @@ const FilterButton = ({label,options,
         <div className="absolute top-full left-0 mt-2 w-full min-w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
           {options.map((option) => (
             <button
-              key={option.value}
+              key={option.label}
               type="button"
               onClick={() => {
                 setIsOpen(false);

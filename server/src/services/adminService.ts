@@ -93,3 +93,18 @@ export async function updateProduct(id: string, productData: Partial<CartItem>) 
     }
 
 }
+
+
+//Delete Product
+
+export async function deleteProduct(productID: string) {
+
+    const product = await productModel.findByIdAndDelete(productID);
+
+    if (!product) {
+       return false
+    }
+
+    return true
+
+}

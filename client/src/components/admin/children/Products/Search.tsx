@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 
 interface SearchInputProps {
     value: string;
-    onChange: (value: string) => void;
+    onChange: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function SearchInput({ value, onChange }: SearchInputProps) {

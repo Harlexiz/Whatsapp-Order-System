@@ -2,9 +2,10 @@
 
 import type { NextFunction, Response, Request } from "express";
 import { AppError } from "../utils/appError.js";
-import { updateProduct, verifyCredentials } from "../services/adminService.js";
+import { deleteProduct, updateProduct, verifyCredentials } from "../services/adminService.js";
 import { destroy, regenerate, save } from "../utils/sessionUtils.js";
 import { config } from "../config.js/index.js";
+import mongoose from "mongoose";
 
 
 
@@ -121,4 +122,43 @@ export async function adminEditProduct(req: Request<{ id: string }>, res: Respon
     } catch (err) {
         next(err);
     }
+}
+
+
+
+//Delete Product
+
+
+export async function adminDeleteProduct(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+
+    console.log("Deleted route accessed")
+
+    try {
+        const { productID } = req.body;
+        
+
+        if (!productID) {
+            return res.status(400).json({
+                message: "Product ID is required",
+            });
+        }
+
+        if (typeof productID !== "string" && !mongoose.isValidObjectId(productID)) {
+            return res.status(400).json({
+                message: "Invalid product ID",
+            });
+        }
+
+        const deleted = await deleteProduct(productID);
+
+        return res.status(200).json({
+            message: "Product deleted successfully",
+        });
+
+
+    } catch (error) {
+        next(error)
+
+    }
+
 }

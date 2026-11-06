@@ -34,6 +34,7 @@ export default function EditModal({ product, onClose }: EditProps) {
         },
     });
 
+    
     const [isAvailable, setIsAvailable] = useState<boolean>(product.isAvailable)
 
     

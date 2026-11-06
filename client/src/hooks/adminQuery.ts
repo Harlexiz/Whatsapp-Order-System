@@ -102,7 +102,6 @@ export const useFetchAdminProducts = (category: string | null, pageNo: number, l
 
 
 // Edit Products
-
 type ProductDetails = {
     name: string,
     unitPrice: number,
@@ -117,5 +116,20 @@ export const useEditProduct = (id: string) => {
             const response = await api.put(`/admin/product/edit-product/${id}`, { name, unitPrice, category, isAvailable })
             return response.data
         }
+    })
+}
+
+
+
+//Delete Product
+
+export const useDeleteProduct = (productID: string)=>{
+    const queryClient = new QueryClient()
+    return useMutation({
+        mutationFn: async()=>{
+            const response = await api.delete(`/admin/product/delete-product`, {
+                data: {productID}
+            })
+        }, 
     })
 }

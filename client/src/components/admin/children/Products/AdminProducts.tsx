@@ -9,6 +9,7 @@ import {
   ChevronRight,
   ChevronDown,
   Check,
+  PackageCheck,
 } from "lucide-react";
 import Table from './Table';
 import EditModal from './EditModal';
@@ -18,6 +19,7 @@ import Pagination from './Pagination';
 import useDebounce from '../../../../utils/debounce';
 import FilterButton, { type FilterOption } from './FilterButton';
 import SearchInput from './Search';
+import DeleteModal from './DeleteModal';
 
 
 
@@ -33,15 +35,9 @@ const categories: FilterOption[] = [
 ];
 
 const availabilityOptions: FilterOption[] = [
-  { label: "Available", value: true },
-  { label: "Unavailable", value: false },
+  { label: "Available", value: "available" },
+  { label: "Unavailable", value: "not-available" },
 ];
-
-
-
-
-
-
 
 
 
@@ -49,37 +45,12 @@ const availabilityOptions: FilterOption[] = [
 
 export default function AdminProducts() {
 
-
-
   // Search
   const [searchKeyword, setSearchKeyword] = useState<string>("")
 
   const [category, setCategory] = useState<string>("")
-
-  const [available, setAvailable] = useState<boolean>(true)
+  const [available, setAvailable] = useState<string>("available")
   const [page, setPage] = useState<number>(1);
-
-
-  //Handles Search Changes
-  const handleSearchChange = (value: string) => {
-    setSearchKeyword(value);
-  };
-
-
-  //Handles Category Chnages 
-  const handleCategoryChange = (value: string) => {
-    setCategory(value);
-  };
-
-  // Handles Availability Changes
-
-  const handleAvailabilityChange = (value: boolean) => {
-    setAvailable(value);
-
-  };
-
-
-
 
 
   // Debounce query
@@ -89,16 +60,17 @@ export default function AdminProducts() {
 
   const [editingProduct, setEditingProduct] = useState<CartItem | null>(null)
 
-  const [deleteProduct, setDeleteProduct] = useState(false)
-  const [productToDeleteID, setProductToDeleteID] = useState(null)
+  // const [deleteProduct, setDeleteProduct] = useState<boolean>(false)
+  const [productToDeleteID, setProductToDeleteID] = useState<string | null>(null)
 
+  //COnverts available to boolean
+  const isAvailable = available === "available"
 
+  console.log("Availability is ", productToDeleteID)
 
-
-  // const formatAvailability = ()
   //Fetch products from server
   const limit: number = 8
-  const { data: product, isLoading: productIsLoading, isError } = useFetchAdminProducts(category, page, limit, available, debounceSearchValue)
+  const { data: product, isLoading: productIsLoading, isError } = useFetchAdminProducts(category, page, limit, isAvailable, debounceSearchValue)
 
 
 
@@ -110,21 +82,23 @@ export default function AdminProducts() {
       <div className="flex flex-col md:flex-row gap-3 w-full">
         <SearchInput
           value={searchKeyword}
-          onChange={handleSearchChange}
+          onChange={setSearchKeyword}
         />
 
         <FilterButton
           label="Category"
           options={categories}
           value={category}
-          onChange={handleCategoryChange}
+          onChange={setCategory}
+          icon={<Tag />}
         />
 
         <FilterButton
           label="Availability"
           options={availabilityOptions}
           value={available}
-          onChange={handleAvailabilityChange}
+          onChange={setAvailable}
+          icon={<PackageCheck />}
         />
       </div>
 
@@ -157,7 +131,6 @@ export default function AdminProducts() {
                 <Table
                   productData={product?.data?.products ?? []} // ?? is a fallback used when result is null or undefined
                   setEditingProduct={setEditingProduct}
-                  setDeleteProduct={setDeleteProduct}
                   setDeleteID={setProductToDeleteID}
                 />
               )}
@@ -186,6 +159,16 @@ export default function AdminProducts() {
           <EditModal
             product={editingProduct}
             onClose={setEditingProduct}
+          />
+        )
+      }
+
+      {/*Edit Modal */}
+      {
+        productToDeleteID && (
+          <DeleteModal
+          productID={productToDeleteID}
+          closeDelete={setProductToDeleteID}
           />
         )
       }
