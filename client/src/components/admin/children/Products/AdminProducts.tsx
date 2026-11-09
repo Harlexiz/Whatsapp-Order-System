@@ -10,6 +10,8 @@ import {
   ChevronDown,
   Check,
   PackageCheck,
+  PlusCircle,
+  ClipboardList,
 } from "lucide-react";
 import Table from './Table';
 import EditModal from './EditModal';
@@ -78,8 +80,23 @@ export default function AdminProducts() {
 
   return (
     <section className="mx-auto w-full  overflow-x-auto">
+      <h1 className="text-2xl font-semibold text-slate-900">Manage Products</h1>
 
-      <div className="flex flex-col md:flex-row gap-3 w-full">
+      <div aria-label="Quick actions" className="flex flex-wrap gap-3 justify-end ">
+        <button
+          className="inline-flex items-center gap-2 rounded-md bg-custom-gold px-4 py-2.5 text-sm font-medium text-white cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          <PlusCircle size={18} aria-hidden="true" /> Add product
+        </button>
+        <button
+          className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          <ClipboardList size={18} aria-hidden="true" /> View all orders
+        </button>
+      </div>
+
+
+      <div className="flex flex-col md:flex-row gap-3 w-full mt-6">
         <SearchInput
           value={searchKeyword}
           onChange={setSearchKeyword}
@@ -167,8 +184,8 @@ export default function AdminProducts() {
       {
         productToDeleteID && (
           <DeleteModal
-          productID={productToDeleteID}
-          closeDelete={setProductToDeleteID}
+            productID={productToDeleteID}
+            closeDelete={setProductToDeleteID}
           />
         )
       }

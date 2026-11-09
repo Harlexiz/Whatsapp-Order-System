@@ -2,9 +2,10 @@ import { createBrowserRouter } from 'react-router-dom'
 import HomePage from './components/HomePage'
 import AdminLayout from './components/admin/AdminLayout'
 import Protected from './components/admin/Protected'
-import Dashboard from './components/admin/children/Dashboard'
 import Login from './components/admin/Login'
 import AdminProducts from './components/admin/children/Products/AdminProducts'
+import Dashboard from './components/admin/children/Dashboard/Dashboard'
+
 
 
 
