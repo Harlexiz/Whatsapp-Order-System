@@ -2,15 +2,22 @@ import React from 'react'
 import { Package, PackageCheck, PackageX, CheckCircle2, PlusCircle, ClipboardList } from "lucide-react";
 import StatsCard from './StatsCard';
 import RecentOrders from './RecentOrders';
+import { useDashboardStats } from '../../../../hooks/adminQuery';
 
-const stats = [
-    { label: "Total products", value: 248, icon: Package, tone: "bg-indigo-50 text-indigo-600" },
-    { label: "Available products", value: 205, icon: PackageCheck, tone: "bg-emerald-50 text-emerald-600" },
-    { label: "Non available", value: 43, icon: PackageX, tone: "bg-rose-50 text-rose-600" },
-    { label: "Completed orders", value: 1284, icon: CheckCircle2, tone: "bg-amber-50 text-amber-600" },
-];
+
 
 export default function Dashboard() {
+    const { data: statData, isLoading } = useDashboardStats()
+    console.log("Stats Data us ", statData)
+    
+    const stats = [
+        { label: "Total products", value: statData?.data.totalProducts ?? 0, icon: Package, tone: "bg-indigo-50 text-indigo-600" },
+        { label: "Available products", value: statData?.data.availableProducts ?? 0, icon: PackageCheck, tone: "bg-emerald-50 text-emerald-600" },
+        { label: "Non available", value: statData?.data.unavailableProducts ?? 0, icon: PackageX, tone: "bg-rose-50 text-rose-600" },
+        { label: "Completed orders", value: statData?.data.completedOrders ?? 0, icon: CheckCircle2, tone: "bg-amber-50 text-amber-600" },
+    ];
+
+
     return (
         <div className='min-h-screen flex flex-col gap-6'>
             <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
@@ -31,7 +38,7 @@ export default function Dashboard() {
             {/*Stats */}
             <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
                 {stats.map((s) => (
-                    <StatsCard key={s.label} {...s} />
+                    <StatsCard key={s.label} {...s} isLoading = {isLoading} />
                 ))}
 
             </div>

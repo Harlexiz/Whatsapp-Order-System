@@ -102,9 +102,32 @@ export async function deleteProduct(productID: string) {
     const product = await productModel.findByIdAndDelete(productID);
 
     if (!product) {
-       return false
+        return false
     }
 
     return true
 
 }
+
+
+// Get Stats
+
+export async function getDashboardStatsService() {
+    const [totalProducts, availableProducts, unavailableProducts,// completedOrders,
+    ] = await Promise.all([
+        productModel.countDocuments(),
+        productModel.countDocuments({ isAvailable: true }),
+        productModel.countDocuments({ isAvailable: false }),
+        // Order.countDocuments({ status: "completed" }),
+    ]);
+
+    return {
+        totalProducts,
+        availableProducts,
+        unavailableProducts,
+
+    };
+
+}
+
+

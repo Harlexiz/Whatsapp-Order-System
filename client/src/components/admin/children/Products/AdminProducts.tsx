@@ -82,7 +82,7 @@ export default function AdminProducts() {
     <section className="mx-auto w-full  overflow-x-auto">
       <h1 className="text-2xl font-semibold text-slate-900">Manage Products</h1>
 
-      <div aria-label="Quick actions" className="flex flex-wrap gap-3 justify-end ">
+      <div aria-label="Quick actions" className="flex flex-wrap gap-3 justify-end">
         <button
           className="inline-flex items-center gap-2 rounded-md bg-custom-gold px-4 py-2.5 text-sm font-medium text-white cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >

@@ -2,7 +2,7 @@
 
 import type { NextFunction, Response, Request } from "express";
 import { AppError } from "../utils/appError.js";
-import { deleteProduct, updateProduct, verifyCredentials } from "../services/adminService.js";
+import { deleteProduct, getDashboardStatsService, updateProduct, verifyCredentials } from "../services/adminService.js";
 import { destroy, regenerate, save } from "../utils/sessionUtils.js";
 import { config } from "../config.js/index.js";
 import mongoose from "mongoose";
@@ -78,6 +78,8 @@ export async function adminLogout(req: Request, res: Response, next: NextFunctio
 
 //==> Products <==//
 
+
+
 //Edit Product
 
 export async function adminEditProduct(req: Request<{ id: string }>, res: Response, next: NextFunction) {
@@ -135,7 +137,7 @@ export async function adminDeleteProduct(req: Request<{ id: string }>, res: Resp
 
     try {
         const { productID } = req.body;
-        
+
 
         if (!productID) {
             return res.status(400).json({
@@ -162,3 +164,27 @@ export async function adminDeleteProduct(req: Request<{ id: string }>, res: Resp
     }
 
 }
+
+
+
+//Get Stats
+
+
+export async function adminGetDashboardStats(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+
+    try {
+        const stats = await getDashboardStatsService();
+        
+        return res.status(200).json({
+            message: "Dashboard statistics fetched successfully",
+            data: {completedOrders: 35, ...stats},
+        });
+    } catch (error) {
+        next(error);
+    }
+
+
+
+}
+
+

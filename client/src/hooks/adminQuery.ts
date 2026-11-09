@@ -123,13 +123,33 @@ export const useEditProduct = (id: string) => {
 
 //Delete Product
 
-export const useDeleteProduct = (productID: string)=>{
+export const useDeleteProduct = (productID: string) => {
     const queryClient = new QueryClient()
     return useMutation({
-        mutationFn: async()=>{
+        mutationFn: async () => {
             const response = await api.delete(`/admin/product/delete-product`, {
-                data: {productID}
+                data: { productID }
             })
-        }, 
+        },
     })
 }
+
+
+// Get Dashboard stats 
+
+interface Stats {
+    completedOrders: number,
+    totalProducts: number;
+    availableProducts: number;
+    unavailableProducts: number;
+}
+
+export const useDashboardStats = () => {
+    return useQuery<ApiResponse<Stats>>({
+        queryKey: ["dashboard-stats"],
+        queryFn: async () => {
+            const response = await api.get<ApiResponse<Stats>>("/admin/product/stats");
+            return response.data
+        },
+    });
+};
