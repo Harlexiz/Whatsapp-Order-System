@@ -42,7 +42,7 @@ export default function Table({ productData, setEditingProduct,  setDeleteID }: 
                             productData.map((item) => (
                                 <tr key={item._id} className="hover:bg-gray-50">
                                     <td className="whitespace-nowrap px-4 py-3">{item.name}</td>
-                                    <td className="whitespace-nowrap px-4 py-3">{item.category}</td>
+                                    <td className="whitespace-nowrap px-4 py-3">{item.category.name}</td>
                                     <td className="whitespace-nowrap px-4 py-3">{item.unitPrice}</td>
                                     <td className="whitespace-nowrap px-4 py-3">
                                         {item.isAvailable ?

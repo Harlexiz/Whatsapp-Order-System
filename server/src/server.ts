@@ -7,6 +7,7 @@ import connectDB from "./config.js/db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { sessionMiddleware } from "./config.js/session.js";
 import { adminRouter } from "./routes/adminRoutes.js";
+import {categoryRouter} from "./routes/categoryRoutes.js";
 
 
 
@@ -37,6 +38,7 @@ myApp.get('/', (req: Request, res: Response) => {
 // Routers
 myApp.use('/api/products', productRouter)
 myApp.use('/api/admin', adminRouter)
+myApp.use('/api/category', categoryRouter)
 
 
 

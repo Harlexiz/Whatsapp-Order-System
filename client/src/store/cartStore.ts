@@ -5,11 +5,16 @@ import { toast } from 'react-toastify'
 
 
 
+interface Category{
+    _id: string,
+    name: string
+}
+
 export interface CartItem {
     _id: string,
     name: string,
     unitPrice: number,
-    category: string,
+    category: Category,
     isAvailable: boolean,
     imageUrl: string,
     createdAt?: Date;

@@ -106,7 +106,7 @@ type ProductDetails = {
     name: string,
     unitPrice: number,
     category: string,
-    isAvailable: boolean
+    isAvailable?: boolean
 }
 
 export const useEditProduct = (id: string) => {
@@ -153,3 +153,16 @@ export const useDashboardStats = () => {
         },
     });
 };
+
+
+// Add Product
+
+export const useAddProduct = () => {
+    const queryClient = new QueryClient()
+    return useMutation({
+        mutationFn: async ({ name, unitPrice, category}: ProductDetails) => {
+            const response = await api.post(`/admin/product/add-product`, { name, unitPrice, category })
+            return response.data
+        }
+    })
+}

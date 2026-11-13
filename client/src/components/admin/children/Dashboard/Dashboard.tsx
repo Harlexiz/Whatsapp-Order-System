@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Package, PackageCheck, PackageX, CheckCircle2, PlusCircle, ClipboardList } from "lucide-react";
 import StatsCard from './StatsCard';
 import RecentOrders from './RecentOrders';
 import { useDashboardStats } from '../../../../hooks/adminQuery';
+import AddProductModal from '../Products/AddProductModal';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const { data: statData, isLoading } = useDashboardStats()
     console.log("Stats Data us ", statData)
     
@@ -18,18 +21,25 @@ export default function Dashboard() {
     ];
 
 
+
+    const [addProductModal, setAddProductModal] = useState<boolean>(false)
+
+
     return (
         <div className='min-h-screen flex flex-col gap-6'>
             <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
 
             <div aria-label="Quick actions" className="flex flex-wrap gap-3 justify-end">
                 <button
+                onClick={()=>setAddProductModal(true)}
                     className="inline-flex items-center gap-2 rounded-md bg-custom-gold px-4 py-2.5 text-sm font-medium text-white cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     <PlusCircle size={18} aria-hidden="true" /> Add product
                 </button>
                 <button
-                    className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                onClick={()=> navigate("/admin/order")}
+                    className="hidden md:inline-flex items-center gap-2 rounded-md border cursor-pointer
+                     border-slate-300 bg-white px-4 py-2.5 text-sm font-medium  text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     <ClipboardList size={18} aria-hidden="true" /> View all orders
                 </button>
@@ -46,6 +56,12 @@ export default function Dashboard() {
             {/*Recent Orders */}
 
             <RecentOrders />
+
+
+            {/*Add Product Modal */}
+            {
+                addProductModal && (<AddProductModal onClose = {()=>setAddProductModal(false)} /> )
+            }
 
         </div>
     )

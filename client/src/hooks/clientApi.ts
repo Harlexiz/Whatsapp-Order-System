@@ -11,25 +11,49 @@ interface ApiResponse<T> {
 
 
 
-interface Product {
-  products: CartItem[]
+// interface Product {
+//   products: CartItem[]
+// }
+
+// export const useFetchAllProducts = () => {
+//   console.log("Query don dey fetch o")
+//   return useQuery<ApiResponse<Product>>({
+//     queryKey: ['all-products'],
+//     queryFn: async () => {
+//       const response = await api.get<ApiResponse<Product>>('/products/all-products')
+//       return response.data  // Represents the whole backend reponse 
+//     },
+//     refetchOnWindowFocus: false,
+//     staleTime: 5 * 60 * 1000,
+//     refetchInterval: 5 * 60 * 1000,
+//     refetchIntervalInBackground: false// ENsures no background refecth when component is not active
+
+//   })
+// }
+
+
+
+
+//Fecth All Categories
+interface Category {
+  _id: string,
+  name: string
 }
 
-export const useFetchAllProducts = () => {
-  console.log("Query don dey fetch o")
-  return useQuery<ApiResponse<Product>>({
-    queryKey: ['all-products'],
+export const useFetchCategories = () => {
+  return useQuery<ApiResponse<Category[]>>({
+    queryKey: ['all-categories'],
     queryFn: async () => {
-      const response = await api.get<ApiResponse<Product>>('/products/all-products')
-      return response.data  // Represents the whole backend reponse 
+      const response = await api.get<ApiResponse<Category[]>>('category/all-categories')
+      return response.data
     },
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000,
-    refetchInterval: 5 * 60 * 1000,
-    refetchIntervalInBackground: false// ENsures no background refecth when component is not active
-
+    staleTime: Infinity,
+    gcTime: 1000 * 60 * 5,
   })
 }
+
+
+///Fetch All products
 
 interface Product {
   products: CartItem[],
@@ -83,7 +107,7 @@ interface VerificationResponse {
   priceChanges: CartItem[],
   nonExistentItems: number,
   orderID?: string
- 
+
 }
 
 export const useVerifyCart = () => {

@@ -3,14 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
 export interface FilterOption {
-  label: string;
-  value: string;
+  _id: string;
+  name: string;
+  
 }
 
 interface FilterDropdownProps {
   icon: React.ReactNode
   label: string;
-  options: FilterOption[];
+  options: FilterOption[] | undefined;
   value: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -23,8 +24,8 @@ const FilterButton = ({label,options,
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find(
-    (option) => option.value === value
+  const selectedOption = options?.find(
+    (option) => option._id === value
   );
 
   // Close dropdown when clicking outside
@@ -56,7 +57,7 @@ const FilterButton = ({label,options,
         className="flex items-center justify-between gap-3 px-4 py-3 border border-gray-300 rounded-lg text-sm min-w-36 hover:bg-gray-50 transition"
       >
         <span>{Icon}</span>
-        <span>{selectedOption?.label || label}</span>
+        <span>{selectedOption?.name || label}</span>
 
         <FaChevronDown
           className={`text-xs transition-transform ${isOpen ? "rotate-180" : ""
@@ -67,21 +68,22 @@ const FilterButton = ({label,options,
       {/* Dropdown options */}
       {isOpen && (
         <div className="absolute top-full left-0 mt-2 w-full min-w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
-          {options.map((option) => (
+         
+          {options?.map((option) => (
             <button
-              key={option.label}
+              key={option._id}
               type="button"
               onClick={() => {
                 setIsOpen(false);
-                onChange(option.value);
+                onChange(option._id);
                 
               }}
-              className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition ${value === option.value
+              className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition ${value === option._id
                   ? "bg-gray-100 font-medium"
                   : ""
                 }`}
             >
-              {option.label}
+              {option.name}
             </button>
           ))}
         </div>

@@ -2,7 +2,7 @@
 
 import type { NextFunction, Response, Request } from "express";
 import { AppError } from "../utils/appError.js";
-import { deleteProduct, getDashboardStatsService, updateProduct, verifyCredentials } from "../services/adminService.js";
+import { createProduct, deleteProduct, getDashboardStatsService, updateProduct, verifyCredentials } from "../services/adminService.js";
 import { destroy, regenerate, save } from "../utils/sessionUtils.js";
 import { config } from "../config.js/index.js";
 import mongoose from "mongoose";
@@ -78,6 +78,40 @@ export async function adminLogout(req: Request, res: Response, next: NextFunctio
 
 //==> Products <==//
 
+
+// New Product
+
+export async function adminAddNewProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+        console.log("Rouets to lo jo ")
+        const { name, category, unitPrice } = req.body
+    
+        if (typeof name !== 'string' || name.trim() === '') {
+            return res.status(400).json({ error: 'Validation error: "name" must be a non-empty string.' });
+        }
+
+        if (typeof category !== 'string' || category.trim() === '') {
+            return res.status(400).json({ error: 'Validation error: "category" must be a non-empty string.' });
+        }
+
+
+        if (typeof unitPrice !== 'number' || isNaN(unitPrice)) {
+            return res.status(400).json({ error: 'Validation error: "unitPrice" must be a valid number.' });
+        }
+
+        const newProduct = await createProduct({ category, name, unitPrice })
+
+        return res.status(201).json({
+            message: 'Product created successfully',
+            product: newProduct,
+        });
+
+
+    } catch (error) {
+        next(error)
+    }
+
+}
 
 
 //Edit Product
@@ -174,10 +208,10 @@ export async function adminGetDashboardStats(req: Request<{ id: string }>, res: 
 
     try {
         const stats = await getDashboardStatsService();
-        
+
         return res.status(200).json({
             message: "Dashboard statistics fetched successfully",
-            data: {completedOrders: 35, ...stats},
+            data: { completedOrders: 35, ...stats },
         });
     } catch (error) {
         next(error);

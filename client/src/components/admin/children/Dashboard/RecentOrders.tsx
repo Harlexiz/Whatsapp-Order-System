@@ -44,7 +44,7 @@ export default function RecentOrders() {
                 <h2 className="border-b border-slate-200 text-base font-semibold text-slate-900">
                     Recent orders
                 </h2>
-                <Link to={'/admin/order'} className='text-sm text-blue-500'>View All</Link>
+                <Link to={'/admin/order'} className='text-sm text-blue-500 md:hidden'>View All</Link>
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">

@@ -5,7 +5,7 @@ import mongoose, { Document } from 'mongoose';
 export interface IProduct {  //Shape of my Schema
     name: string;
     unitPrice: number;
-    category: string;
+    category: Types.ObjectId;
     isAvailable: boolean;
     imageUrl: string;
     purchaseQty: number;
@@ -44,8 +44,9 @@ const productSchema = new Schema<IProduct>({
         required: true,
     },
     category: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
+        ref: "Category"
     },
 
     isAvailable: {
@@ -73,14 +74,14 @@ const productSchema = new Schema<IProduct>({
 
 //1.
 
-productSchema.statics.findProducts = function (category: string) {
-    console.log("Custom function activated. Categry wey enter na", category)
-    if (category === "all") {
-        console.log("Oya Na")
-        return this.find({ isAvailable: true })
-    }
-    return this.find({ category, isAvailable: true })
-}
+// productSchema.statics.findProducts = function (category: string) {
+//     console.log("Custom function activated. Categry wey enter na", category)
+//     if (category === "all") {
+//         console.log("Oya Na")
+//         return this.find({ isAvailable: true })
+//     }
+//     return this.find({ category, isAvailable: true })
+// }
 
 
 

@@ -34,7 +34,7 @@ export default function CartList({ product }: CartListProps) {
                             {product.name}
                         </p>
                         <p className="mt-0.5 text-xs text-[#6B6558]">
-                            {product.category}
+                            {product.category.name}
                         </p>
                     </div>
                     <button

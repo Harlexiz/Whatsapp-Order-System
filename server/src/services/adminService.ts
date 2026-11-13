@@ -70,9 +70,33 @@ export async function createAdmin(email: string, password: string, name: string)
 
 //PRODUCTS
 
+//Add new product
+
+interface NewProduct {
+    name: string,
+    category: string,
+    unitPrice: number
+}
+
+export async function createProduct({ category, name, unitPrice }: NewProduct) {
+    if (!mongoose.Types.ObjectId.isValid(category)) {
+        throw new AppError("Invalid Product ID", 400);
+    }
+
+
+    const newProduct = await productModel.create({
+        name,
+        category,
+        unitPrice,
+        imageUrl: "https://placehold.co/600x400?text=Bluetooth+Speaker"
+    });
+
+    return newProduct
+
+}
+
+
 // Edit Products
-
-
 
 export async function updateProduct(id: string, productData: Partial<CartItem>) {
     if (!mongoose.Types.ObjectId.isValid(id)) {

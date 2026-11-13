@@ -1,33 +1,34 @@
 import React, { useCallback, useState } from 'react'
 import { ErrorBoundary } from "react-error-boundary"
 import ProductTab from './ProductTab'
-import { useFetchProducts } from '../../hooks/clientApi'
+import { useFetchCategories, useFetchProducts } from '../../hooks/clientApi'
 import ProductCard from './ProductCard'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 interface Tabs {
   name: string,
-  value: string
+  // value?: string,
+  _id: string
 }
 
-const categoryTabs: Tabs[] = [
-  { name: "All", value: '' },
-  { name: "Electronics", value: 'Electronics' },
-  { name: "Home & Kitchen", value: 'Home' },
-  { name: "Audio", value: 'Audio' },
-  { name: "Apparel", value: 'Apparel' },
-  { name: "Origo", value: 'Origo' },
-  { name: "Bulely", value: 'bulely' },
-  { name: "Material", value: 'material' },
-  { name: "Sokoto", value: 'sokoto' },
-  { name: "Bundle", value: 'bundle' },
-  { name: "Tira", value: 'tira' },
-  { name: "Crole", value: 'crole' },
-  { name: "Batinga", value: 'batinga' },
-  { name: "Pore", value: 'pore' },
+// const categoryTabs: Tabs[] = [
+//   { name: "All", value: '' },
+//   { name: "Electronics", value: 'Electronics' },
+//   { name: "Home & Kitchen", value: 'Home' },
+//   { name: "Audio", value: 'Audio' },
+//   { name: "Apparel", value: 'Apparel' },
+//   { name: "Origo", value: 'Origo' },
+//   { name: "Bulely", value: 'bulely' },
+//   { name: "Material", value: 'material' },
+//   { name: "Sokoto", value: 'sokoto' },
+//   { name: "Bundle", value: 'bundle' },
+//   { name: "Tira", value: 'tira' },
+//   { name: "Crole", value: 'crole' },
+//   { name: "Batinga", value: 'batinga' },
+//   { name: "Pore", value: 'pore' },
 
 
-]
+// ]
 
 export default function Product() {
   //Set Category key
@@ -35,6 +36,12 @@ export default function Product() {
   const [page, setPage] = useState<number>(1);
 
   console.log("Page number is ",)
+
+  //Fetch Categories
+
+  const {data: categories} = useFetchCategories()
+
+  const myCatTabs: Tabs[] = [{name: "All", _id: ""}, ...categories?.data ?? []]
 
   //Fecth Products
   const limit: number = 6
@@ -81,8 +88,8 @@ export default function Product() {
         <div className='pt-2 hidden lg:flex gap-7  overflow-x-auto md:flex-wrap md:overflow-visible md:gap-y-2.5
                    [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >'>
-          {categoryTabs.map((item) => (
-            <ProductTab key={item.name} name={item.name} value={item.value} onCategoryChange={handleCategoryChange} activeCategory={fetchCategory} />
+          {myCatTabs.map((item) => (
+            <ProductTab key={item.name} name={item.name} value={item._id} onCategoryChange={handleCategoryChange} activeCategory={fetchCategory} />
           ))}
 
         </div>
@@ -95,13 +102,13 @@ export default function Product() {
               className="flex gap-2 overflow-x-auto px-4 py-2
                    [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             >
-              {categoryTabs.map((item) => (
+              {myCatTabs.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => handleCategoryChange(item.value)}
+                  onClick={() => handleCategoryChange(item._id)}
                   className={`shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full border transition-colors
                       ' text-neutral-600 border-gray-300  hover:bg-custom-gold  hover:text-white hover:border-custom-gold
-                       ${fetchCategory === item.value ? 'bg-custom-gold text-white border-custom-gold' : 'text-gray-500 border-gray-300'}`}
+                       ${fetchCategory === item._id ? 'bg-custom-gold text-white border-custom-gold' : 'text-gray-500 border-gray-300'}`}
                 >
                   {item.name}
                 </button>

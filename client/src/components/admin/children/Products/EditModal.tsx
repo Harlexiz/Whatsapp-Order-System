@@ -6,6 +6,7 @@ import Toggle from './Toggle';
 import { useEditProduct } from '../../../../hooks/adminQuery';
 import { toast } from 'react-toastify';
 import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { useFetchCategories } from '../../../../hooks/clientApi';
 
 
 interface EditProps {
@@ -13,13 +14,20 @@ interface EditProps {
     onClose: React.Dispatch<React.SetStateAction<CartItem | null>>
 }
 
-const CATEGORIES: string[] = [
-    "Electronics", "Clothing",
-    "Beauty", "Home", "Groceries"
-];
+
+interface FormFields{
+    productName: string,
+    unitPrice: number,
+    age: number,
+    
+}
+
 
 export default function EditModal({ product, onClose }: EditProps) {
+
     const queryClient = useQueryClient()
+
+    const {data: categories} = useFetchCategories()
 
     const {
         register,
@@ -29,7 +37,7 @@ export default function EditModal({ product, onClose }: EditProps) {
         defaultValues: {
             productName: product.name,
             unitPrice: product.unitPrice,
-            category: product.category,
+            category: product.category._id,
             isAvailable: product.isAvailable
         },
     });
@@ -40,6 +48,9 @@ export default function EditModal({ product, onClose }: EditProps) {
     
     const { mutate, isPending, isError } = useEditProduct(product._id)
 
+    
+    
+    // Submit form data
     type FormData = {
         productName: string,
         unitPrice: number,
@@ -113,8 +124,8 @@ export default function EditModal({ product, onClose }: EditProps) {
                         <select style={{ fontSize: 12, width: "100%", border: "1.5px solid #e2e8f0" }}
                             {...register("category", { required: "Please select a category." })}>
                             <option value="">Select a category</option>
-                            {CATEGORIES.map((cat) => (
-                                <option key={cat} value={cat}>{cat}</option>
+                            {categories?.data.map((cat) => (
+                                <option key={cat._id} value={cat._id}>{cat.name}</option>
                             ))}
                         </select>
                         {errors.category && <p className='text-[0.6rem] text-red-600'>{errors.category.message}</p>}

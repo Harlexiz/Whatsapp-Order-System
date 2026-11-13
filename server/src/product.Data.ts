@@ -1,4 +1,4 @@
-import {Types} from 'mongoose'
+import { Types } from 'mongoose'
 export interface CartItem {
   _id: string | Types.ObjectId,
   name: string,
@@ -10,7 +10,7 @@ export interface CartItem {
   image?: string,
   oldPrice?: number,
   priceChanged?: boolean
- 
+
 }
 
 
@@ -127,7 +127,8 @@ interface Pro {
   category: string,
   isAvailable: boolean,
   imageUrl: string,
-  purchaseQty?: number
+  purchaseQty?: number,
+  description?: string
 }
 
 
@@ -141,7 +142,7 @@ export const productData: Pro[] = [
     category: 'Electronics',
     isAvailable: true,
     imageUrl: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500',
-    
+
   },
   {
     name: 'Mechanical Gaming Keyboard',
@@ -279,5 +280,246 @@ export const productData: Pro[] = [
     category: 'Sports',
     isAvailable: true,
     imageUrl: 'https://images.unsplash.com/photo-1434596922112-19c563067271?w=500',
+  },
+];
+
+
+
+
+export const productDataOne: Pro[] = [
+  
+  // ELECTRONICS
+  {
+    name: "Samsung 43-inch Smart TV",
+    unitPrice: 350000,
+    description: "43-inch Samsung Smart LED television with 4K display.",
+    category: "6af293b0f014360e41404ffa",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Samsung+TV",
+  },
+  {
+    name: "Wireless Bluetooth Speaker",
+    unitPrice: 45000,
+    description: "Portable Bluetooth speaker with quality sound and long battery life.",
+    category: "6af293b0f014360e41404ffa",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Bluetooth+Speaker",
+  },
+  {
+    name: "Oraimo Power Bank",
+    unitPrice: 28000,
+    description: "20000mAh portable power bank with fast charging support.",
+    category: "6af293b0f014360e41404ffa",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Power+Bank",
+  },
+  {
+    name: "Wireless Headphones",
+    unitPrice: 35000,
+    description: "Comfortable wireless headphones with noise isolation.",
+    category: "6af293b0f014360e41404ffa",
+    purchaseQty: 1,
+    isAvailable: false,
+    imageUrl: "https://placehold.co/600x400?text=Headphones",
+  },
+  {
+    name: "USB-C Fast Charger",
+    unitPrice: 12000,
+    description: "25W USB-C fast charging adapter for compatible devices.",
+    category: "6af293b0f014360e41404ffa",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Fast+Charger",
+  },
+
+  // CLOTHING
+  {
+    name: "Men's Polo Shirt",
+    unitPrice: 12000,
+    description: "Classic cotton polo shirt suitable for casual outings.",
+    category: "6af293b0f014360e41404ffb",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Polo+Shirt",
+  },
+  {
+    name: "Women's Casual Dress",
+    unitPrice: 18500,
+    description: "Beautiful casual dress suitable for everyday wear.",
+    category: "6af293b0f014360e41404ffb",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Casual+Dress",
+  },
+  {
+    name: "Men's Denim Jeans",
+    unitPrice: 22000,
+    description: "Comfortable slim-fit denim jeans for everyday use.",
+    category: "6af293b0f014360e41404ffb",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Denim+Jeans",
+  },
+  {
+    name: "Unisex Hoodie",
+    unitPrice: 25000,
+    description: "Soft cotton-blend hoodie with a front pocket.",
+    category: "6af293b0f014360e41404ffb",
+    purchaseQty: 1,
+    isAvailable: false,
+    imageUrl: "https://placehold.co/600x400?text=Hoodie",
+  },
+  {
+    name: "Women's Leggings",
+    unitPrice: 9500,
+    description: "Stretchable leggings suitable for casual wear and exercise.",
+    category: "6af293b0f014360e41404ffb",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Leggings",
+  },
+
+  // SPORTS
+  {
+    name: "Professional Football",
+    unitPrice: 18000,
+    description: "Durable size 5 football suitable for training and matches.",
+    category: "6af293b1f014360e41404ffc",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Football",
+  },
+  {
+    name: "Skipping Rope",
+    unitPrice: 4500,
+    description: "Adjustable skipping rope for cardio and fitness training.",
+    category: "6af293b1f014360e41404ffc",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Skipping+Rope",
+  },
+  {
+    name: "Yoga Mat",
+    unitPrice: 12000,
+    description: "Non-slip exercise mat suitable for yoga and stretching.",
+    category: "6af293b1f014360e41404ffc",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Yoga+Mat",
+  },
+  {
+    name: "Adjustable Dumbbells",
+    unitPrice: 55000,
+    description: "Adjustable dumbbell set for home strength training.",
+    category: "6af293b1f014360e41404ffc",
+    purchaseQty: 1,
+    isAvailable: false,
+    imageUrl: "https://placehold.co/600x400?text=Dumbbells",
+  },
+  {
+    name: "Sports Water Bottle",
+    unitPrice: 6500,
+    description: "Reusable sports water bottle with leak-proof lid.",
+    category: "6af293b1f014360e41404ffc",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Sports+Bottle",
+  },
+
+  // ACCESSORIES
+  {
+    name: "Leather Wrist Watch",
+    unitPrice: 28000,
+    description: "Stylish wristwatch with a classic leather strap.",
+    category: "6af293b1f014360e41404ffd",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Wrist+Watch",
+  },
+  {
+    name: "Classic Sunglasses",
+    unitPrice: 8500,
+    description: "Fashionable sunglasses with UV protection.",
+    category: "6af293b1f014360e41404ffd",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Sunglasses",
+  },
+  {
+    name: "Leather Wallet",
+    unitPrice: 11000,
+    description: "Compact leather wallet with multiple card slots.",
+    category: "6af293b1f014360e41404ffd",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Leather+Wallet",
+  },
+  {
+    name: "Fashion Backpack",
+    unitPrice: 19500,
+    description: "Spacious everyday backpack with multiple compartments.",
+    category: "6af293b1f014360e41404ffd",
+    purchaseQty: 1,
+    isAvailable: false,
+    imageUrl: "https://placehold.co/600x400?text=Backpack",
+  },
+  {
+    name: "Baseball Cap",
+    unitPrice: 7000,
+    description: "Adjustable casual baseball cap for everyday styling.",
+    category: "6af293b1f014360e41404ffd",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Baseball+Cap",
+  },
+
+  // HOME
+  {
+    name: "Electric Kettle",
+    unitPrice: 22000,
+    description: "1.7-litre electric kettle with automatic shut-off.",
+    category: "6af293b1f014360e41404ffe",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Electric+Kettle",
+  },
+  {
+    name: "Non-stick Frying Pan",
+    unitPrice: 15000,
+    description: "Non-stick frying pan suitable for everyday cooking.",
+    category: "6af293b1f014360e41404ffe",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Frying+Pan",
+  },
+  {
+    name: "Table Lamp",
+    unitPrice: 12500,
+    description: "Modern bedside table lamp with a soft lighting effect.",
+    category: "6af293b1f014360e41404ffe",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Table+Lamp",
+  },
+  {
+    name: "Laundry Basket",
+    unitPrice: 8500,
+    description: "Large lightweight laundry basket for household use.",
+    category: "6af293b1f014360e41404ffe",
+    purchaseQty: 1,
+    isAvailable: false,
+    imageUrl: "https://placehold.co/600x400?text=Laundry+Basket",
+  },
+  {
+    name: "Kitchen Storage Set",
+    unitPrice: 18000,
+    description: "Set of airtight food storage containers for kitchen organization.",
+    category: "6af293b1f014360e41404ffe",
+    purchaseQty: 1,
+    isAvailable: true,
+    imageUrl: "https://placehold.co/600x400?text=Storage+Set",
   },
 ];

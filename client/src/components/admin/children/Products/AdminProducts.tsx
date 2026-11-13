@@ -22,6 +22,8 @@ import useDebounce from '../../../../utils/debounce';
 import FilterButton, { type FilterOption } from './FilterButton';
 import SearchInput from './Search';
 import DeleteModal from './DeleteModal';
+import { useFetchCategories } from '../../../../hooks/clientApi';
+import AddProductModal from './AddProductModal';
 
 
 
@@ -29,16 +31,16 @@ import DeleteModal from './DeleteModal';
 
 
 
-const categories: FilterOption[] = [
-  { label: "All Categories", value: "" },
-  { label: "Sports", value: "Sports" },
-  { label: "Electronics", value: "Electronics" },
-  { label: "Home & Kitchen", value: "Home" },
-];
+// const categories: FilterOption[] = [
+//   { label: "All Categories", value: "" },
+//   { label: "Sports", value: "Sports" },
+//   { label: "Electronics", value: "Electronics" },
+//   { label: "Home & Kitchen", value: "Home" },
+// ];
 
 const availabilityOptions: FilterOption[] = [
-  { label: "Available", value: "available" },
-  { label: "Unavailable", value: "not-available" },
+  { name: "Available", _id: "available" },   // _id will represent value
+  { name: "Unavailable", _id: "not-available" },
 ];
 
 
@@ -47,9 +49,14 @@ const availabilityOptions: FilterOption[] = [
 
 export default function AdminProducts() {
 
+  const { data: categories } = useFetchCategories()
+  console.log("The fetched catgepry is", categories)
+
+  const categoryOptions: FilterOption[] = [{ name: "All Categories", _id: "" }, ...categories?.data ?? []]
+
+
   // Search
   const [searchKeyword, setSearchKeyword] = useState<string>("")
-
   const [category, setCategory] = useState<string>("")
   const [available, setAvailable] = useState<string>("available")
   const [page, setPage] = useState<number>(1);
@@ -58,12 +65,12 @@ export default function AdminProducts() {
   // Debounce query
   const debounceSearchValue = useDebounce(searchKeyword, 700)
 
-  console.log("debounceing at ", debounceSearchValue)
-
   const [editingProduct, setEditingProduct] = useState<CartItem | null>(null)
 
   // const [deleteProduct, setDeleteProduct] = useState<boolean>(false)
   const [productToDeleteID, setProductToDeleteID] = useState<string | null>(null)
+
+  const [addProductModal, setAddProductModal] = useState<boolean>(false)
 
   //COnverts available to boolean
   const isAvailable = available === "available"
@@ -82,8 +89,8 @@ export default function AdminProducts() {
     <section className="mx-auto w-full  overflow-x-auto">
       <h1 className="text-2xl font-semibold text-slate-900">Manage Products</h1>
 
-      <div aria-label="Quick actions" className="flex flex-wrap gap-3 justify-end">
-        <button
+      <div aria-label="Quick actions" className="flex flex-wrap gap-3 justify-end mt-4">
+        <button   onClick={()=>setAddProductModal(true)}
           className="inline-flex items-center gap-2 rounded-md bg-custom-gold px-4 py-2.5 text-sm font-medium text-white cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           <PlusCircle size={18} aria-hidden="true" /> Add product
@@ -103,8 +110,8 @@ export default function AdminProducts() {
         />
 
         <FilterButton
-          label="Category"
-          options={categories}
+          label="All Categories"
+          options={categoryOptions}
           value={category}
           onChange={setCategory}
           icon={<Tag />}
@@ -188,6 +195,12 @@ export default function AdminProducts() {
             closeDelete={setProductToDeleteID}
           />
         )
+      }
+
+
+      {/*Add Product Modal */}
+      {
+        addProductModal && (<AddProductModal onClose={() => setAddProductModal(false)} />)
       }
 
 

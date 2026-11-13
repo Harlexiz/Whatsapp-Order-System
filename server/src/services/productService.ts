@@ -1,7 +1,9 @@
 import { products, type CartItem } from "../product.Data.js";
 import { productModel, type IProduct, type ProductDocument, type ProductLean } from "../models/productModel.js";
-import { type QueryFilter, type Types, Document } from "mongoose";
+import mongoose, { type QueryFilter, type Types, Document } from "mongoose";
 import { generateOrderId } from "../utils/generateOrderID.js";
+import { AppError } from "../utils/appError.js";
+import {categoryModel} from '../models/categoryModel.js'
 
 
 interface ProductItem {
@@ -22,7 +24,7 @@ export async function verifyCartService(productItems: ProductItem[]) {
         isAvailable: true
     }).select("-createdAt -updatedAt -purchaseQty -__v").lean();
 
-   
+
 
 
     // Map respective Product id to each product
@@ -53,7 +55,7 @@ export async function verifyCartService(productItems: ProductItem[]) {
 
         const priceMatches: boolean = product?.unitPrice === eachItem.unitPrice // Check if price sent from frontend matches database price
         if (!priceMatches) {
-            priceChanges.push({ ...product,  purchaseQty: eachItem.purchaseQty, oldPrice: eachItem.unitPrice, priceChanged: true })
+            priceChanges.push({ ...product, purchaseQty: eachItem.purchaseQty, oldPrice: eachItem.unitPrice, priceChanged: true })
             continue
         }
 
@@ -68,10 +70,10 @@ export async function verifyCartService(productItems: ProductItem[]) {
     // Confirm if product needs review
 
     const needsReview = verifiedItems.length !== productItems.length
-    
+
     let orderID: string | null = null;
 
-    if(!needsReview){
+    if (!needsReview) {
         //Generate order Id and save to backend
         orderID = generateOrderId()
     }
@@ -86,7 +88,14 @@ export async function verifyCartService(productItems: ProductItem[]) {
         orderID
 
     }
+
+
 }
+
+
+
+
+
 
 
 
@@ -115,24 +124,39 @@ interface FetchProductReturn {
 }
 
 
-export async function fetchProductService({ category, pageNo=1, isAvailable = true, limit=6, skip=0, search }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
+export async function fetchProductService({ category, pageNo = 1, isAvailable = true, limit = 6, skip = 0, search }: ProductFilter = {}): Promise<FetchProductReturn> { // I am promised a result whose blueprint is ProductLean
 
-   
+
     //Partial ensures strict type based on the interface IProduct
     //QueryFilter allows arbitrary(random) properties
-    const query: QueryFilter<IProduct> = { isAvailable};
-
-    // Business rule: "all" or no category means no category filter
-    if (category && category !== "all") {
-        console.log("Block Executed")
-        query.category = category;
-    }
-
-    if(search){
-        query.name =  { $regex: search, $options: "i" }
-    }
+    const query: QueryFilter<IProduct> = { isAvailable };
 
    
+    if (category !== undefined && category !== "") {
+       
+
+        if (!mongoose.isValidObjectId(category)) {
+            throw new AppError("Invalid category ID format", 400);
+        }
+
+        const categoryExists = await categoryModel.exists({ _id: category });
+        console.log("Category Exists", categoryExists)  
+        if (!categoryExists) {
+            throw new AppError("Category not found", 404);
+        }
+
+        query.category = new mongoose.Types.ObjectId(category);  // or query.category = categoryExists._id
+    }
+
+
+    if (search) {
+        query.name = { $regex: search, $options: "i" }
+    }
+
+
+
+    console.log("Query After every ", query)
+
     //WHEN TO USE .lean()
 
     //1.Read - Only API Endpoints: When fetching data solely to render UI or send JSON responses(e.g., res.json(users)).
@@ -151,10 +175,10 @@ export async function fetchProductService({ category, pageNo=1, isAvailable = tr
     // Ensures the plain object have the shape of ProductLean
 
     const [myFetchedProducts, totalProducts] = await Promise.all([ // all helps me to run multiple request concurrently
-        productModel.find(query).skip(skip).limit(limit).select("-createdAt -updatedAt -__v").lean<ProductLean[]>(),
+        productModel.find(query).populate("category", "name").skip(skip).limit(limit).sort({createdAt: -1}).select("-createdAt -updatedAt -__v").lean<ProductLean[]>(),
         productModel.countDocuments(query)
 
-    ])  // Runs both queries concurrently
+    ])  // Runs both queries concurrently and if one request fails to resolve then all request fails
 
     const totalPages = Math.ceil(totalProducts / limit)
     return {

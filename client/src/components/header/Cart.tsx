@@ -96,7 +96,7 @@ export default function Cart() {
                     toast.error("You no dey go anywhere")
                     return
                 }
-               
+
                 if (!orderID) {
                     toast.error("Could not create your order, please try again");
                     return;
