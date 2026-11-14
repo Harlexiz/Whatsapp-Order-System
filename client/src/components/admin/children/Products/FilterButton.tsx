@@ -48,7 +48,7 @@ const FilterButton = ({label,options,
 
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative  " ref={dropdownRef}>
       {/* Dropdown button */}
       <button
         type="button"
@@ -67,7 +67,7 @@ const FilterButton = ({label,options,
 
       {/* Dropdown options */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full min-w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
+        <div className="absolute top-full left-0 mt-2  w-full min-w-44 bg-white h-40  min-h-20 overflow-y-scroll overflow-x-hidden  border-gray-200 rounded-lg shadow-lg z-50 py-2 border-4">
          
           {options?.map((option) => (
             <button

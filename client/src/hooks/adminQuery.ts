@@ -1,6 +1,7 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../utils/api";
 import type { CartItem } from "../store/cartStore";
+import type { AxiosError } from "axios";
 
 
 // import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -124,7 +125,7 @@ export const useEditProduct = (id: string) => {
 //Delete Product
 
 export const useDeleteProduct = (productID: string) => {
-    const queryClient = new QueryClient()
+  
     return useMutation({
         mutationFn: async () => {
             const response = await api.delete(`/admin/product/delete-product`, {
@@ -158,7 +159,7 @@ export const useDashboardStats = () => {
 // Add Product
 
 export const useAddProduct = () => {
-    const queryClient = new QueryClient()
+  
     return useMutation({
         mutationFn: async ({ name, unitPrice, category}: ProductDetails) => {
             const response = await api.post(`/admin/product/add-product`, { name, unitPrice, category })
@@ -166,3 +167,30 @@ export const useAddProduct = () => {
         }
     })
 }
+
+
+
+// Add Product
+
+
+
+interface CategoryDetails {
+    name: string,
+    description: string
+}
+
+
+interface CategoryResponse {
+    message: string
+}
+export const useAddCategory = () => {
+  
+    return useMutation<CategoryResponse,   AxiosError<{ message: string }>, CategoryDetails>({
+        mutationFn: async ({name, description}) => {
+            const response = await api.post<CategoryResponse>(`/category/add-category`, { name, description })
+            return response.data
+        }
+    })
+}
+
+

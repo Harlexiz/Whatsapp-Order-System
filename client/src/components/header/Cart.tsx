@@ -41,8 +41,6 @@ const buildWhatsAppUrl = (orderID: string) => {
 
     const message = `Hello, I'd like to place an order:\nTotal: ₦${total.toLocaleString()}\nOrder ID: ${orderID}`;
     //  const messag = `Hello, I'd like to place an order:\n\n${lines.join("\n")}\n\nTotal: ₦${total.toLocaleString()}`;
-
-
     return `https://wa.me/${SELLER_NUMBER}?text=${encodeURIComponent(message)}`;
 };
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { fetchCategories } from '../controllers/categoryController.js'
+import { addCategory, fetchCategories } from '../controllers/categoryController.js'
 
 
 export const categoryRouter = express.Router()
@@ -9,7 +9,9 @@ export const categoryRouter = express.Router()
 
 //Fetch all categroy
 
-categoryRouter.get('/all-categories', fetchCategories)
+categoryRouter.get('/all-categories', fetchCategories) 
+
+categoryRouter.post('/add-category',  addCategory)  // require admin
 
 
 
