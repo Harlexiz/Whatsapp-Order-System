@@ -24,7 +24,7 @@ export default function Login() {
             mode: "all"
         });
 
-    const { mutate, isPending} = useLogin()
+    const { mutate, isPending } = useLogin()
 
 
     //If user is alread logged in
@@ -37,10 +37,9 @@ export default function Login() {
         // Call your login API here
         mutate({ email: data.email, password: data.password }, {
             onError: (error) => {
-                const err = error as AxiosError<{ message: string }>;
-                const message = err.response?.data?.message
-                console.log("The Error Was ", message)
+                const message = error.response?.data?.error ||  error.response?.data?.message ||  "Login Failed";
                 toast.error(message)
+                console.log("The Message is ", message)  
             }
         })
 

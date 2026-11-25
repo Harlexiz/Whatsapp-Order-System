@@ -30,6 +30,7 @@ api.interceptors.response.use(
             queryClient.setQueryData(['current-user'], null);
 
             const inAdmin = window.location.pathname.startsWith('/admin');
+            // Redirect if user is in admin area and they are not in the login page
             if (inAdmin && window.location.pathname !== '/admin/login') {
                 window.location.href = '/admin/login';
             }

@@ -7,5 +7,8 @@ export const loginRateLimiter = rateLimit({
   skipSuccessfulRequests: true,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Too many login attempts. Try again in 15 minutes.' },
+  statusCode: 429,
+  message: {
+    error: 'Too many login attempts',
+  }
 });

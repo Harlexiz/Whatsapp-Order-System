@@ -16,7 +16,9 @@ type MyAdmin = HydratedDocument<AdminData>
 const toPublic = (admin: MyAdmin) => (
     {
         id: admin.id,
-        email: admin.email
+        email: admin.email,
+        name: admin.name,
+        role: admin.role
     }
 );
 
@@ -64,6 +66,74 @@ export async function createAdmin(email: string, password: string, name: string)
     return toPublic(admin);
 }
 
+
+//Update Admin Profile
+
+
+export async function updateAdminProfileService(id: string, name: string, email: string) {
+
+    if (!mongoose.isValidObjectId(id)) return null;
+
+    const admin = await adminModel.findById(id)
+    if (!admin) {
+        throw new AppError('Admin not found', 404);
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Check if another admin already uses this email
+    const existingAdmin = await adminModel.findOne({
+        email: normalizedEmail,
+        _id: { $ne: admin._id }
+    });
+
+    if (existingAdmin) {
+        throw new AppError("Email is already in use", 409);
+    }
+
+    admin.name = name.trim();
+    admin.email = normalizedEmail;
+
+    await admin.save();
+
+}
+
+
+//Update Admin Password
+
+export async function updateAdminPassword(id: string, currentPassword: string, newPassword: string) {
+    if (!mongoose.isValidObjectId(id)) return null;
+
+    
+
+    const admin = await adminModel.findById(id).select('+passwordHash')
+    if (!admin) {
+        throw new AppError('Admin not found', 404);
+    }
+
+    console.log("Admin is ", admin)
+
+    //Check if password matches the current password tallies
+    const isMatch = await bcrypt.compare(currentPassword, admin.passwordHash)
+     
+    if (!isMatch) {
+        
+        throw new AppError('Current password is incorrect', 403)
+    }
+
+    // Check if they are the same
+    const isSame = await bcrypt.compare(newPassword, admin.passwordHash)
+
+    
+    if (isSame) {
+        throw new AppError("Password must be different", 403)
+    }
+
+    // Hash new password 
+    admin.passwordHash = await bcrypt.hash(newPassword, COST);
+    await admin.save();
+
+}
 
 
 

@@ -13,8 +13,12 @@ interface ApiResponse<T> {
 
 interface AuthResponse {
     id: string,
-    email: string
+    email: string,
+    name: string,
+    role: string
 }
+
+// const queryClient = useQueryClient();
 
 
 //Fetch Current Admin User
@@ -40,18 +44,23 @@ type Credentials = {
     email: string,
     password: string
 }
+type ErrorResponse = {
+    error?: string;
+    message?: string;
+};
 
 export const useLogin = () => {
     const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: async ({ email, password }: Credentials) => {
+    return useMutation<ApiResponse<AuthResponse>, AxiosError<ErrorResponse>, Credentials>({
+        mutationFn: async ({ email, password }) => {
             const response = await api.post<ApiResponse<AuthResponse>>('/admin/auth/login', { email, password })
             return response.data
         },
-        onSuccess: (data) => {
-            // THIS na the one wey tell your app say user don login
-            queryClient.setQueryData(['current-user'], data.data);
+        onSuccess: async (data) => {
+            // // THIS na the one wey tell your app say user don login
+            queryClient.setQueryData(['current-user'], data);
+            // await queryClient.invalidateQueries({queryKey:['current-user']})  /// This is also an option
         },
     });
 }
@@ -67,6 +76,41 @@ export const useLogout = () => {
             queryClient.setQueryData(['current-user'], null)
         }
     })
+}
+
+//Update Admin profile
+
+export const useUpdateProfile = () => {
+    
+    return useMutation<{ message: string }, AxiosError<{ message: string }>, { name: string, email: string }>({
+        mutationFn: async ({ name, email }) => {
+            const response = await api.patch<{ message: string }>('/admin/auth/update-profile', { name, email })
+            return response.data
+        },
+
+    })
+
+}
+
+
+//Update Admin password
+
+interface PasswordCredentials {
+    currentPassword : string,
+    newPassword:  string,
+    confirmPassword: string
+}
+
+export const useUpdatePassword = () => {
+   
+    return useMutation<{ message: string }, AxiosError<{ message: string }>, PasswordCredentials>({
+        mutationFn: async ({ currentPassword, newPassword, confirmPassword }) => {
+            const response = await api.patch<{ message: string }>('/admin/auth/update-password', { currentPassword, newPassword, confirmPassword })
+            return response.data
+        },
+
+    })
+
 }
 
 
@@ -125,7 +169,7 @@ export const useEditProduct = (id: string) => {
 //Delete Product
 
 export const useDeleteProduct = (productID: string) => {
-  
+
     return useMutation({
         mutationFn: async () => {
             const response = await api.delete(`/admin/product/delete-product`, {
@@ -159,9 +203,9 @@ export const useDashboardStats = () => {
 // Add Product
 
 export const useAddProduct = () => {
-  
+
     return useMutation({
-        mutationFn: async ({ name, unitPrice, category}: ProductDetails) => {
+        mutationFn: async ({ name, unitPrice, category }: ProductDetails) => {
             const response = await api.post(`/admin/product/add-product`, { name, unitPrice, category })
             return response.data
         }
@@ -184,9 +228,9 @@ interface CategoryResponse {
     message: string
 }
 export const useAddCategory = () => {
-  
-    return useMutation<CategoryResponse,   AxiosError<{ message: string }>, CategoryDetails>({
-        mutationFn: async ({name, description}) => {
+
+    return useMutation<CategoryResponse, AxiosError<{ message: string }>, CategoryDetails>({
+        mutationFn: async ({ name, description }) => {
             const response = await api.post<CategoryResponse>(`/category/add-category`, { name, description })
             return response.data
         }

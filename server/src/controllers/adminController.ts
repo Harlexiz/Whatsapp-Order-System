@@ -2,13 +2,15 @@
 
 import type { NextFunction, Response, Request } from "express";
 import { AppError } from "../utils/appError.js";
-import { createProduct, deleteProduct, getDashboardStatsService, updateProduct, verifyCredentials } from "../services/adminService.js";
+import { createProduct, deleteProduct, getAdminById, getDashboardStatsService, updateAdminPassword, updateAdminProfileService, updateProduct, verifyCredentials } from "../services/adminService.js";
 import { destroy, regenerate, save } from "../utils/sessionUtils.js";
 import { config } from "../config.js/index.js";
 import mongoose from "mongoose";
 
 
 
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
 //==> Admin Authentication <==//
@@ -24,7 +26,11 @@ export async function adminLogin(req: Request, res: Response, next: NextFunction
         if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
             throw new AppError('Email and password are required', 400);
         }
+        // CHeck if email cis valid (regex)
 
+        if (!emailRegex.test(email)) {
+            throw new AppError("Email not valid", 400)
+        }
 
 
         const admin = await verifyCredentials(email, password);
@@ -43,7 +49,7 @@ export async function adminLogin(req: Request, res: Response, next: NextFunction
         await save(req);                // written to the "sessions" collection
 
         // res.json({ admin, csrfToken });
-        res.status(200).json({ data: { admin } })
+        res.status(200).json({ data: { id: admin.id, name: admin.name, email: admin.email, role: admin?.role } })
     } catch (err) {
         next(err);
     }
@@ -51,9 +57,10 @@ export async function adminLogin(req: Request, res: Response, next: NextFunction
 
 //Get Current Logged in User
 
-export function getCurrentAdmin(req: Request, res: Response) {
-    console.log("Trig to get the user")
-    res.status(200).json({ admin: req.admin });
+export async function getCurrentAdmin(req: Request, res: Response) {
+    const admin = await getAdminById(req.admin?.id ?? "")
+   
+    res.status(200).json({ data: { id: admin?.id, name: admin?.name, email: admin?.email, role: admin?.role } });
 }
 
 //Logout
@@ -67,6 +74,73 @@ export async function adminLogout(req: Request, res: Response, next: NextFunctio
     }
 }
 
+
+// Update Profile
+
+export async function adminUpdateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { name, email } = req.body
+        if ([name, email].some(field => !field)) {
+            throw new AppError("All fields are requied", 400)
+        }
+
+
+        // confim if emal is valid
+        if (!emailRegex.test(email)) {
+            throw new AppError("Email not valid", 400)
+        }
+
+        if (!req.admin?.id) {
+            throw new AppError("Unauthorized", 401);
+        }
+
+        await updateAdminProfileService(req.admin.id, name, email)
+
+        return res.status(200).json({
+            message: "Profile updated successfully"
+        });
+
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+/// Update user password
+
+export async function adminUpdatePassword(req: Request, res: Response, next: NextFunction) {
+    console.log("Route hit")
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+         
+        if (!req.admin?.id) {
+            throw new AppError("Unauthorized", 401);
+        }
+
+        // 1. Validate input
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            throw new AppError("All fields are required", 400)
+        }
+
+        if (newPassword.length < 8) {
+            throw new AppError("New password must be at least 8 characters", 400)
+        }
+
+        if (newPassword !== confirmPassword) {
+            throw new AppError("Passwords do not match", 400)
+        }   
+       
+
+        // Pass to service 
+        await updateAdminPassword(req.admin.id, currentPassword, newPassword)
+
+        return res.status(200).json({message: "Password updated succesfully"})
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 
 
@@ -85,7 +159,7 @@ export async function adminAddNewProduct(req: Request, res: Response, next: Next
     try {
         console.log("Rouets to lo jo ")
         const { name, category, unitPrice } = req.body
-    
+
         if (typeof name !== 'string' || name.trim() === '') {
             return res.status(400).json({ error: 'Validation error: "name" must be a non-empty string.' });
         }
